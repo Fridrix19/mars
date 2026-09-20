@@ -1,0 +1,44 @@
+<main>
+  <section class="hero wrap svc-hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="{{BASE}}catalog.html">Каталог</a><span class="sep">/</span>
+          <span aria-current="page">{{CAT_NAME}}</span>
+        </nav>
+        <h1 class="svc-h1">{{CAT_NAME}}<img class="svc-inline cat-inline" alt="" src="{{CAT_ICON}}"></h1>
+        <p>{{CAT_LEAD}}</p>
+        <div class="facts">
+          <div class="fact"><b>{{CAT_COUNT}}</b><span>{{CAT_COUNT_WORD}}</span></div>
+          <div class="fact"><b>{{CAT_FROM}}</b><span>минимальный план</span></div>
+          <div class="fact"><b>15 мин</b><span>выпуск карты</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#list">Выбрать сервис</a>
+          <a class="btn btn-ghost" href="#">Выпустить карту</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <div class="wrap stack">
+    <section class="panel reveal" id="list">
+      <div class="section-head sec-head">
+        <div>
+          <span class="eyebrow">{{CAT_NAME}}</span>
+          <h2>{{CAT_COUNT}} {{CAT_COUNT_WORD}}</h2>
+        </div>
+        <div class="search">
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg>
+          <input id="secSearch" type="search" placeholder="Найти сервис" aria-label="Поиск в разделе" autocomplete="off">
+        </div>
+      </div>
+      <div class="cats" role="tablist" aria-label="Подкатегории" id="secSub"></div>
+      <div class="card-grid sec-grid" id="secGrid" role="list"></div>
+      <div class="tiles-foot" id="secFoot"><span id="secCount" role="status"></span><button type="button" class="btn btn-ghost btn-sm" id="secMore" hidden>Показать ещё</button></div>
+    </section>
+
+{{AFTER}}
+  </div>
+</main>

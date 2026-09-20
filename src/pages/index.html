@@ -1,0 +1,124 @@
+<main>
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Виртуальная карта и подписки</span>
+        <h1>Зарубежные сервисы — оплата через СБП</h1>
+        <p>Виртуальная карта в долларах за 15 минут. ChatGPT, Cursor, Netflix, Steam и ещё {{SVC_COUNT}} сервисов.</p>
+        <div class="facts">
+          <div class="fact"><b>{{SVC_TOTAL}}</b><span>сервисов</span></div>
+          <div class="fact"><b>15 мин</b><span>выпуск карты</span></div>
+          <div class="fact"><b>СБП</b><span>оплата по QR</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#">Выпустить карту</a>
+          <a class="btn btn-ghost" href="#cats">Каталог</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="card-stage" id="cardStage" role="img" aria-label="Виртуальная карта Marscap">
+          <div class="card-halo" aria-hidden="true"></div>
+          <div class="card-float">
+            <div class="card-tilt" id="cardTilt">
+              <div class="card-spin">
+                <div class="face face-front">
+                  <span class="orbit"></span><span class="orbit o2"></span>
+                  <span class="f-brand">Marscap</span>
+                  <span class="f-type">VIRTUAL</span>
+                  <span class="f-chip"></span>
+                  <svg class="f-wave" viewBox="0 0 24 24" fill="none" stroke="#EEF2FF" stroke-width="1.6" stroke-linecap="round"><path d="M6 8.5a6 6 0 0 1 0 7M9.5 6a10 10 0 0 1 0 12M13 3.5a14 14 0 0 1 0 17"/></svg>
+                  <span class="f-num">5375 •••• •••• 4021</span>
+                  <span class="f-meta"><span>ДО <b>09/29</b></span><span>USD</span></span>
+                  <img class="f-logo" src="{{LOGO}}" alt="">
+                </div>
+                <div class="face face-back">
+                  <span class="f-stripe"></span>
+                  <span class="f-sign"></span>
+                  <span class="f-cvc">•••</span>
+                  <span class="f-cvc-label">CVC</span>
+                  <span class="f-back-note">Реквизиты приходят на почту после оплаты. Работает в любом сервисе с оплатой в USD.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-shadow" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap stack">
+    <!-- категории -->
+    <section class="panel reveal" id="cats">
+      <div class="section-head">
+        <span class="eyebrow">Каталог</span>
+        <h2>Что можно оплатить</h2>
+        <p>Выберите категорию — внутри сервисы с ценами и инструкцией.</p>
+      </div>
+      <div class="card-grid home-cats" id="homeCats"></div>
+    </section>
+
+    <!-- популярные -->
+    <section class="panel reveal" id="popular">
+      <div class="section-head">
+        <span class="eyebrow">Популярное</span>
+        <h2>Чаще всего оплачивают</h2>
+      </div>
+      <div class="card-grid" id="homePopular"></div>
+      <div class="tiles-foot" style="margin-block-start:14px"><span></span><a class="btn btn-ghost btn-sm" href="#cats">Все {{SVC_TOTAL}} сервисов</a></div>
+    </section>
+
+    <!-- как это работает -->
+    <section class="panel reveal" id="how">
+      <div class="section-head">
+        <span class="eyebrow">Как это работает</span>
+        <h2>Четыре шага</h2>
+      </div>
+      <div class="num-grid">
+        <article class="card num-card"><span class="idx"></span><h3>Выберите сервис</h3><p>Или сразу номинал карты — от $50 до $200.</p></article>
+        <article class="card num-card"><span class="idx"></span><h3>Укажите почту</h3><p>На неё придут реквизиты и инструкция.</p></article>
+        <article class="card num-card"><span class="idx"></span><h3>Оплатите через СБП</h3><p>QR-код, курс ЦБ, итог виден до оплаты.</p></article>
+        <article class="card num-card"><span class="idx"></span><h3>Привяжите карту</h3><p>Через 15 минут карта готова — оплачивайте подписку.</p></article>
+      </div>
+      <div class="home-why">
+        <article class="card info-card"><span class="eyebrow">Прозрачно</span><h3>Итог в рублях — до оплаты</h3><p>Курс ЦБ и комиссия видны сразу, без скрытых списаний.</p></article>
+        <article class="card info-card accent"><span class="eyebrow">Важно</span><h3>Сначала карта, потом сервис</h3><p>Платёж на сайте — за выпуск карты. Подписку вы оплачиваете ею на сайте сервиса.</p></article>
+        <article class="card info-card"><span class="eyebrow">Поддержка</span><h3>Telegram, Max, почта</h3><p>Найдём заказ по почте и поможем с привязкой.</p></article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="panel reveal" id="faq">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Вопросы</h2>
+      </div>
+      <div class="acc-list home-faq">
+        <details class="acc" open><summary>Как проходит оплата?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">Указываете почту, платите по QR через СБП. В течение 15 минут на почту приходят реквизиты карты и инструкция.</div></details>
+        <details class="acc"><summary>Я сразу оплачиваю сервис?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">Нет. Вы покупаете виртуальную карту с номиналом в долларах, а ею уже оплачиваете подписку на сайте сервиса.</div></details>
+        <details class="acc"><summary>Сколько занимает выпуск карты?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">До 15 минут после подтверждения платежа. Обычно — 2–5 минут.</div></details>
+        <details class="acc"><summary>Куда приходят реквизиты?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">На почту, указанную при оформлении, и в личный кабинет.</div></details>
+        <details class="acc"><summary>Можно оплатить сервис, которого нет в каталоге?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">Да, если он не относится к запрещённым категориям по оферте. Карта работает в любом сервисе с оплатой в USD.</div></details>
+        <details class="acc"><summary>Что делать, если письмо не пришло?<span class="acc-ico" aria-hidden="true"></span></summary><div class="acc-body">Проверьте «Спам» и напишите в поддержку — найдём заказ по почте и отправим повторно.</div></details>
+      </div>
+    </section>
+
+    <!-- поддержка + CTA -->
+    <section class="panel reveal" id="support">
+      <div class="section-head">
+        <span class="eyebrow">Поддержка</span>
+        <h2>Если нужна помощь</h2>
+      </div>
+      <div class="card-grid">
+        <article class="card info-card"><span class="eyebrow">Telegram</span><h3>Быстрые ответы</h3><p>Выбор сервиса, оплата, привязка карты.</p><div class="card-foot"><a class="btn btn-ghost btn-sm" href="#">Написать в Telegram</a></div></article>
+        <article class="card info-card"><span class="eyebrow">Max</span><h3>Второй канал</h3><p>Если Telegram недоступен.</p><div class="card-foot"><a class="btn btn-ghost btn-sm" href="#">Открыть Max</a></div></article>
+        <article class="card info-card"><span class="eyebrow">Почта</span><h3>support@marscap.ru</h3><p>Заказы, документы, возвраты.</p><div class="card-foot"><a class="btn btn-ghost btn-sm" href="#">Написать письмо</a></div></article>
+      </div>
+      <div class="home-cta">
+        <div><h2>Готовы начать?</h2><p>Карта за 15 минут, оплата через СБП.</p></div>
+        <div class="hero-cta"><a class="btn btn-primary" href="#">Выпустить карту</a><a class="btn btn-ghost" href="#cats">Каталог</a></div>
+      </div>
+    </section>
+  </div>
+</main>

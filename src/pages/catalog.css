@@ -1,0 +1,29 @@
+/* ——— каталог: хаб направлений ——— */
+.sec-row{display:flex; flex-direction:row; justify-content:space-between; align-items:flex-end; gap:12px 32px; flex-wrap:wrap; max-width:none; margin-block-end:18px}
+.sec-row > div{display:flex; flex-direction:column; gap:10px; min-width:0}
+.sec-row .search{flex:0 1 360px; width:100%; max-width:360px; margin-block-end:2px}
+.cat-dirs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cat-dirs .cat-vc{grid-column:span 3; flex-direction:row; align-items:center; gap:16px 28px; flex-wrap:wrap}
+.cat-dirs .cat-vc .cat-head{flex:1 1 320px}
+.cat-dirs .cat-vc > p{flex:1 1 260px; margin:0}
+.cat-dirs .cat-vc .cat-tags{flex:none; margin:0}
+.cat-dirs .cat-vc .arrow-link{flex:none}
+.cat-logos{display:flex; gap:6px; margin-block-start:2px}
+.cat-logos img{width:30px; height:30px; border-radius:8px; background:#fff; padding:4px; object-fit:contain; box-shadow:0 0 0 1px rgba(14,20,32,.10)}
+.cat-logos img.on-dark{background:var(--ink-800); box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cat-logos .more{width:30px; height:30px; border-radius:8px; display:grid; place-items:center; font-family:var(--font-mono); font-size:11px; color:var(--text-4); background:var(--panel-solid); border:1px solid var(--line)}
+.cat-dirs .cat-from{font-family:var(--font-mono); font-size:12.5px; color:var(--text-3); font-variant-numeric:tabular-nums}
+.cat-dirs .cat-from b{color:var(--text); font-weight:500}
+.cat-dirs .cat-card .arrow-link{margin-block-start:auto}
+.cat-tiles{grid-template-columns:repeat(4,minmax(0,1fr)); margin-block-start:14px}
+@media (max-width:1000px){
+  .cat-dirs{grid-template-columns:repeat(2,minmax(0,1fr))} .cat-dirs .cat-vc{grid-column:span 2}
+  .cat-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .sec-row .search{max-width:none; flex:1 1 100%}
+  .cat-dirs{grid-template-columns:1fr} .cat-dirs .cat-vc{grid-column:auto; flex-direction:column; align-items:stretch; gap:10px}
+  .cat-dirs .cat-vc .cat-head,.cat-dirs .cat-vc > p,.cat-dirs .cat-vc .cat-tags,.cat-dirs .cat-vc .arrow-link{flex:none}
+  .cat-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-cta{padding:20px 16px} .home-cta .hero-cta{width:100%}
+}

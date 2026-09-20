@@ -1,0 +1,114 @@
+<main>
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Виртуальная карта</span>
+        <h1>Оплачивайте зарубежные сервисы без лишних шагов</h1>
+        <p>Выберите номинал — выпустим карту и пришлём реквизиты с инструкцией на почту. Оплата через СБП, курс ЦБ, комиссия видна до оплаты.</p>
+        <div class="facts">
+          <div class="fact"><b>15 мин</b><span>средний срок выпуска</span></div>
+          <div class="fact"><b>80,2254 ₽</b><span>курс ЦБ на сегодня</span></div>
+          <div class="fact"><b>СБП</b><span>оплата по QR НСПК</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#order">Рассчитать и оформить</a>
+          <a class="btn btn-ghost" href="#how">Как это работает</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="card-stage" id="cardStage" role="img" aria-label="Виртуальная карта Marscap, вращается в 3D">
+          <div class="card-halo" aria-hidden="true"></div>
+          <div class="card-float">
+            <div class="card-tilt" id="cardTilt">
+              <div class="card-spin">
+                <div class="face face-front">
+                  <span class="orbit"></span><span class="orbit o2"></span>
+                  <span class="f-brand">Marscap</span>
+                  <span class="f-type">VIRTUAL</span>
+                  <span class="f-chip"></span>
+                  <svg class="f-wave" viewBox="0 0 24 24" fill="none" stroke="#EEF2FF" stroke-width="1.6" stroke-linecap="round"><path d="M6 8.5a6 6 0 0 1 0 7M9.5 6a10 10 0 0 1 0 12M13 3.5a14 14 0 0 1 0 17"/></svg>
+                  <span class="f-num">5375 •••• •••• 4021</span>
+                  <span class="f-meta"><span>ДО <b>09/29</b></span><span>USD</span></span>
+                  <img class="f-logo" src="{{LOGO}}" alt="">
+                </div>
+                <div class="face face-back">
+                  <span class="f-stripe"></span>
+                  <span class="f-sign"></span>
+                  <span class="f-cvc">•••</span>
+                  <span class="f-cvc-label">CVC</span>
+                  <span class="f-back-note">Реквизиты приходят на почту после оплаты. Карта работает в любом сервисе, принимающем оплату в USD.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-shadow" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap stack">
+    <section class="panel panel-order reveal" id="order">
+      <div class="section-head">
+        <span class="eyebrow">Расчёт и оформление</span>
+        <h2>Два шага до карты</h2>
+        <p>Выберите номинал и укажите почту. Сумма считается в долларах и переводится в рубли по курсу ЦБ — всё, из чего складывается итог, справа.</p>
+      </div>
+
+      <div class="config">
+        <div class="steps">
+          <div class="step">
+            <div class="step-head"><span class="step-num">01</span><h3>Номинал карты</h3></div>
+            <p class="step-hint">Столько окажется на карте. Комиссию и сбор добавим сверху — итог справа.</p>
+            <div class="switch" role="group" aria-label="Тип номинала">
+              <button type="button" id="tabFixed" aria-pressed="true">Из списка</button>
+              <button type="button" id="tabCustom" aria-pressed="false">Своя сумма</button>
+            </div>
+            <div class="denoms" id="denoms" role="group" aria-label="Номинал">
+              <button type="button" class="denom" data-den="10"><b>$10</b><span>1 364 ₽</span></button>
+              <button type="button" class="denom" data-den="20"><b>$20</b><span>2 327 ₽</span></button>
+              <button type="button" class="denom" data-den="50" aria-pressed="true"><b>$50</b><span>5 215 ₽</span></button>
+              <button type="button" class="denom" data-den="100"><b>$100</b><span>10 028 ₽</span></button>
+            </div>
+            <div class="custom-row" id="customRow" hidden>
+              <div class="field">
+                <label for="customAmount">Номинал в долларах</label>
+                <input id="customAmount" type="number" min="5" max="500" step="1" inputmode="numeric" value="50">
+              </div>
+              <p class="hint">От $5 до $500</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><span class="step-num">02</span><h3>Куда прислать реквизиты</h3></div>
+            <div class="field">
+              <label for="email">Электронная почта</label>
+              <input id="email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="mail@example.ru" aria-describedby="emailHint">
+              <p class="hint" id="emailHint">Отправим номер карты, срок, CVC и инструкцию по привязке.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="calc" aria-labelledby="calcTitle">
+          <h3 id="calcTitle">Расчёт</h3>
+          <p class="calc-sub">Виртуальная карта · выпуск до 15 минут</p>
+          <dl class="calc-rows">
+            <div class="calc-row"><dt>Номинал карты</dt><dd id="rowDen">$50.00</dd></div>
+            <div class="calc-row"><dt>Комиссия сервиса<span class="sub">20% от номинала</span></dt><dd id="rowFee">$10.00</dd></div>
+            <div class="calc-row"><dt>Сбор за выпуск</dt><dd>$5.00</dd></div>
+            <div class="calc-row"><dt>Итого в долларах</dt><dd id="rowUsd">$65.00</dd></div>
+            <div class="calc-row"><dt>Курс ЦБ<span class="sub">фиксируется в момент оплаты</span></dt><dd>80,2254 ₽</dd></div>
+          </dl>
+          <dl class="calc-total"><dt>К оплате</dt><dd id="rowTotal">5 215 ₽</dd></dl>
+          <button type="button" class="btn btn-primary" id="pay">Оплатить через СБП</button>
+          <p class="calc-status" id="status" role="status"></p>
+          <p class="calc-note">Нажимая «Оплатить», вы принимаете условия <a href="#">оферты</a>. Курс в прототипе зафиксирован для примера.</p>
+        </aside>
+      </div>
+
+{{SHOWCASE}}
+    </section>
+
+{{AFTER}}  </div>
+</main>

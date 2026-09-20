@@ -1,0 +1,72 @@
+<main>
+  <section class="hero wrap svc-hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="{{BASE}}catalog.html">Каталог</a><span class="sep">/</span>
+          <a href="{{BASE}}section/{{CAT_ID}}/index.html"><img alt="" src="{{CAT_ICON}}">{{CAT_NAME}}</a><span class="sep">/</span>
+          <span aria-current="page">{{SVC_NAME}}</span>
+        </nav>
+        <h1 class="svc-h1">{{SVC_NAME}}<img class="svc-inline {{LOGO_CLASS}}" alt="" src="{{SVC_ICON}}"></h1>
+        <p>{{SVC_LEAD}}</p>
+        <div class="facts">
+          <div class="fact"><b>{{FACT1_B}}</b><span>{{FACT1_S}}</span></div>
+          <div class="fact"><b>15 мин</b><span>выпуск карты после оплаты</span></div>
+          <div class="fact"><b>{{FACT3_B}}</b><span>{{FACT3_S}}</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#order">Выбрать план</a>
+          <a class="btn btn-ghost" href="#how">Как это работает</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <div class="wrap stack">
+    <section class="panel panel-order reveal" id="order">
+      <div class="section-head">
+        <span class="eyebrow">Расчёт и оформление</span>
+        <h2>{{ORDER_TITLE}}</h2>
+        <p>{{ORDER_LEAD}}</p>
+      </div>
+
+      <div class="config">
+        <div class="steps">
+          <div class="step">
+            <div class="step-head"><span class="step-num">01</span><h3>{{STEP1_TITLE}}</h3></div>
+            <p class="step-hint">{{STEP1_HINT}}</p>
+            <div class="plan-groups" id="planGroups"></div>
+            <div class="plan-details" id="planDetails" aria-live="polite"></div>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><span class="step-num">02</span><h3>Куда прислать реквизиты</h3></div>
+            <div class="field">
+              <label for="email">Электронная почта</label>
+              <input id="email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="mail@example.ru" aria-describedby="emailHint">
+              <p class="hint" id="emailHint">Отправим номер карты, срок, CVC и инструкцию по привязке к {{SVC_SHORT}}.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="calc" aria-labelledby="calcTitle">
+          <h3 id="calcTitle">Расчёт</h3>
+          <p class="calc-sub" id="calcSub">{{SVC_NAME}} · выпуск до 15 минут</p>
+          <dl class="calc-rows">
+            <div class="calc-row"><dt>Способ оплаты</dt><dd>СБП</dd></div>
+            <div class="calc-row"><dt>{{ROW_PLAN_LABEL}}</dt><dd id="rowPlan" data-pb-label>$20 / мес</dd></div>
+            <div class="calc-row"><dt>Комиссия</dt><dd id="rowComm">802 ₽</dd></div>
+          </dl>
+          <dl class="calc-total"><dt>Итого</dt><dd id="rowTotal">2 407 ₽</dd></dl>
+          <button type="button" class="btn btn-primary" id="pay">Оплатить через СБП</button>
+          <p class="calc-status" id="status" role="status"></p>
+          <p class="calc-note">Нажимая «Оплатить», вы принимаете условия <a href="#">оферты</a>. Сумма в рублях — по курсу ЦБ на момент оплаты (в прототипе 80,2254 ₽).</p>
+        </aside>
+      </div>
+
+{{SHOWCASE}}
+    </section>
+
+{{AFTER}}  </div>
+</main>

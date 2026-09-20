@@ -1,0 +1,50 @@
+<main>
+  <section class="hero wrap svc-hero faq-hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">FAQ</span>
+        <h1>Частые вопросы</h1>
+        <p>Оплата, выпуск карты, письмо с реквизитами и привязка к сервису — коротко и по делу.</p>
+        <div class="facts">
+          <div class="fact"><b>{{FAQ_COUNT}}</b><span>ответов</span></div>
+          <div class="fact"><b>15 мин</b><span>выпуск карты</span></div>
+          <div class="fact"><b>СБП</b><span>единственный способ оплаты</span></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#faq">К вопросам</a>
+          <a class="btn btn-ghost" href="#">Поддержка</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <div class="wrap stack">
+    <section class="panel reveal" id="faq">
+      <div class="section-head sec-row">
+        <div><span class="eyebrow">Вопросы и ответы</span><h2>Найдите свой вопрос</h2></div>
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input id="faqSearch" type="search" placeholder="Например: спам, CVC, возврат" aria-label="Поиск по вопросам" autocomplete="off"></div>
+      </div>
+      <div class="cats faq-topics" role="tablist" aria-label="Темы" id="faqTopics"></div>
+      <div class="faq-body">
+        <div class="faq-main">
+          <div class="acc-list faq-list" id="faqList"></div>
+          <div class="tiles-foot faq-foot"><span id="faqCount" role="status"></span><button type="button" class="btn btn-ghost btn-sm" id="faqReset" hidden>Сбросить</button></div>
+        </div>
+        <aside class="faq-side">
+          <div class="faq-ask">
+            <span class="eyebrow">Не нашли ответ?</span>
+            <h3>Спросите нас</h3>
+            <p>Telegram отвечает за ~15 минут. Укажите почту из заказа — найдём его сразу.</p>
+            <a class="btn btn-primary" href="#">Написать в Telegram</a>
+            <a class="btn btn-ghost" href="#">Все каналы связи</a>
+          </div>
+          <div class="faq-popular">
+            <span class="eyebrow">Чаще всего спрашивают</span>
+            <ul class="link-list" id="faqTop"></ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+</main>

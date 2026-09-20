@@ -1,0 +1,260 @@
+
+@media (min-width: 901px) {
+  body.virtual-card-page .page-hero-shell.page-hero-glass > .page-hero-grid {
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr) !important;
+    gap: 24px !important;
+    align-items: stretch !important;
+  }
+
+  body.virtual-card-page .page-hero-copy.vc-hero-left {
+    position: relative;
+    z-index: 3;
+    padding: 38px 34px !important;
+    max-width: none !important;
+    background:
+      linear-gradient(180deg, rgba(6,10,24,.94), rgba(8,13,30,.88)),
+      linear-gradient(135deg, rgba(10,18,40,.98), rgba(7,11,24,.84));
+    border: 1px solid rgba(255,255,255,.10) !important;
+    box-shadow: 0 28px 90px rgba(7,12,26,.22) !important;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 28px !important;
+    color: #fff;
+    min-height: 100%;
+  }
+  body.virtual-card-page .vc-hero-left h1 {
+    color: #fff !important;
+    font-size: clamp(26px, 3.5vw, 38px) !important;
+    line-height: 1.15 !important;
+    margin: 14px 0 !important;
+    max-width: 12ch;
+  }
+  body.virtual-card-page .vc-hero-left p {
+    color: rgba(239,244,255,.70) !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    max-width: 33ch;
+  }
+  body.virtual-card-page .vc-hero-left .eyebrow {
+    color: #5b9cf5 !important;
+    background: rgba(91,156,245,.08) !important;
+    border-color: rgba(91,156,245,.18) !important;
+  }
+  body.virtual-card-page .vc-hero-left .clean-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 20px !important;
+    display: grid;
+    gap: 6px;
+  }
+  body.virtual-card-page .vc-hero-left .clean-list li {
+    color: rgba(210,220,240,.75) !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    padding: 6px 0 6px 20px !important;
+    position: relative;
+  }
+  body.virtual-card-page .vc-hero-left .clean-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #5b9cf5;
+  }
+  body.virtual-card-page .vc-hero-left .btn-row {
+    margin-top: 22px !important;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  body.virtual-card-page .page-hero-visual.vc-visual {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 598px;
+    border-radius: 28px !important;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(7, 11, 28, .45), rgba(7, 11, 28, .18));
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .page-hero-scene {
+    position: relative !important;
+    min-height: 270px !important;
+    height: 270px !important;
+    inset: auto !important;
+    border-radius: 28px 28px 0 0 !important;
+    overflow: hidden !important;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background:
+      radial-gradient(circle at 50% 56%, rgba(194,213,255,.18), rgba(120,150,255,.06) 18%, transparent 38%),
+      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .page-hero-glow-a,
+  body.virtual-card-page .page-hero-visual.vc-visual .page-hero-glow-b,
+  body.virtual-card-page .page-hero-visual.vc-visual .page-hero-dust {
+    opacity: 1 !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-scene-card {
+    width: 220px !important;
+    top: 52% !important;
+    left: 50% !important;
+    transform: translate(-50%, -65%) !important;
+    opacity: .85 !important;
+    filter: drop-shadow(0 0 40px rgba(100,140,255,.25)) drop-shadow(0 16px 32px rgba(0,0,0,.4));
+    animation: vc-float 4s ease-in-out infinite;
+  }
+
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-bottom {
+    position: relative;
+    z-index: 3;
+    margin-top: auto !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 28px !important;
+    padding: 32px 30px !important;
+    min-height: 35%;
+    background: linear-gradient(180deg, rgba(8,12,28,.92), rgba(12,18,34,.88)) !important;
+    border-top: 1px solid rgba(255,255,255,.12) !important;
+    border-left: 1px solid rgba(255,255,255,.06) !important;
+    border-right: 1px solid rgba(255,255,255,.04) !important;
+    border-bottom: 1px solid rgba(255,255,255,.02) !important;
+    border-radius: 0 0 28px 28px !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    box-shadow:
+      0 2px 0 rgba(255,255,255,.05) inset,
+      0 -4px 12px rgba(0,0,0,.3),
+      0 8px 32px rgba(0,0,0,.25),
+      0 1px 0 rgba(100,140,255,.08) inset !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-media {
+    display: grid !important;
+    gap: 14px !important;
+    align-content: start !important;
+    justify-items: center !important;
+    min-width: 0 !important;
+    width: 220px !important;
+    flex: 0 0 220px !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-card-3d {
+    flex-shrink: 0;
+    margin-top: 0 !important;
+    width: 208px !important;
+    perspective: 800px;
+    filter: drop-shadow(0 0 32px rgba(100,140,255,.35)) drop-shadow(0 12px 24px rgba(0,0,0,.4));
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-card-body {
+    animation: vc-3d-spin 8s linear infinite;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-mini-points {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-mini-points span {
+    justify-content: flex-start !important;
+    min-height: 38px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    text-align: left !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 999px !important;
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025)) !important;
+    border: 1px solid rgba(255,255,255,.07) !important;
+    color: rgba(227,235,250,.78) !important;
+  }
+
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info {
+    display: grid !important;
+    gap: 12px !important;
+    align-content: start !important;
+    margin-left: 0 !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-info-kicker {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: max-content;
+    max-width: 100%;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info h3 {
+    color: #f0f4ff !important;
+    font-size: 20px !important;
+    line-height: 1.15 !important;
+    margin: 0 0 10px !important;
+    font-weight: 700 !important;
+    max-width: none !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-title-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 0 0 6px !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-title-meta span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+    border: 1px solid rgba(255,255,255,.07);
+    color: rgba(227,235,250,.78);
+    font-size: 11.5px;
+    line-height: 1;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-copy-stack {
+    display: grid !important;
+    gap: 8px !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-copy-stack .vc-copy-lead,
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-copy-stack .vc-copy-support,
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info p {
+    margin: 0 !important;
+    color: rgba(200,210,230,.65) !important;
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+    max-width: none !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-copy-stack .vc-copy-lead {
+    color: #f2f6ff !important;
+    font-weight: 500 !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-copy-stack .vc-copy-support {
+    color: rgba(210,221,244,.72) !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+    gap: 12px !important;
+    max-width: none !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info ul li,
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info ul li:last-child {
+    min-width: 0 !important;
+    min-height: 100% !important;
+    padding: 12px 14px 12px 30px !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.045) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    line-height: 1.4 !important;
+    color: rgba(217,228,247,.86) !important;
+    position: relative !important;
+  }
+  body.virtual-card-page .page-hero-visual.vc-visual .vc-glass-info ul li::before {
+    content: "✓" !important;
+    position: absolute !important;
+    left: 13px !important;
+    top: 12px !important;
+    color: #5b9cf5 !important;
+  }
+}

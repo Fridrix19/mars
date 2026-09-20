@@ -1,0 +1,304 @@
+    <!-- ====================== 18 СТРУКТУРА ====================== -->
+    <section class="ds-section" id="panels">
+      <div class="ds-h"><span class="kicker"><i>18</i>Шаблоны</span><h2>Структура страницы</h2><p>Каждая страница сайта — шапка, hero, стопка стеклянных панелей поверх галактики, футер. Анатомия панели одна на всех страницах: кикер → h2 → лид → содержимое. Внутри панели плитки и карточки на <code>--surface</code>, поверх них ничего не «плавает».</p></div>
+      <div class="ds-block">
+        <h3>Панель</h3>
+        <div class="ds-demo" data-name="Panel anatomy" data-nocode><div class="demo-in col">
+          <div class="anatomy">
+            <span class="tag" style="top:-10px;left:20px">.panel · blur 16 · радиус 26 · рамка --line · светящаяся кромка сверху</span>
+            <span class="eyebrow">Кикер · Inter 600</span>
+            <h2 style="margin-block-start:8px">Заголовок секции · h2</h2>
+            <p style="color:var(--text-3);max-width:var(--measure);margin-block-start:8px">Лид секции — одно-два предложения, что здесь и зачем. Ширина не больше 64ch.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-block-start:22px">
+              <div class="tile" style="pointer-events:none"><div class="skeleton square" style="animation:none"></div><span class="t"><b>Плитка · --surface</b><span>радиус 14</span></span></div>
+              <div class="tile" style="pointer-events:none"><div class="skeleton square" style="animation:none"></div><span class="t"><b>Плитка</b><span>gap 10</span></span></div>
+              <div class="tile" style="pointer-events:none"><div class="skeleton square" style="animation:none"></div><span class="t"><b>Плитка</b><span>padding 9 12</span></span></div>
+            </div>
+            <span class="tag" style="bottom:-10px;right:20px">внутренний отступ clamp(26px, 4vw, 44px) · между панелями clamp(20px, 3vw, 30px)</span>
+          </div>
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Фон</td><td>Галактика <code>galaxy-bg.v58.js</code> на фиксированном канвасе под всем; в светлой теме — та же, инвертированная в тёмную. Центр смещён под визуал hero (<code>data-cx-factor / cy-factor / dx / dy</code>), на мобильном — по центру.</td></tr>
+          <tr><td>Панель</td><td>Фон <code>--panel</code> (82% ink-900 в тёмной, 86% белого в светлой) с blur 16, рамка <code>--line</code>, радиус 26 (20 на мобильном), тень <code>0 40px 80px -50px --shadow</code>, светящаяся кромка 1px сверху (blue → cyan). Появляется с подъездом на 22px.</td></tr>
+          <tr><td>Шапка секции</td><td><code>.section-head</code>: кикер, h2, лид <code>--text-3</code>; gap 10, отступ снизу 30, ширина до 64ch.</td></tr>
+          <tr><td>Стопка</td><td><code>.stack</code>: панели с gap clamp(20px, 3vw, 30px), сверху clamp(10px, 2vw, 20px), снизу clamp(44px, 6vw, 72px).</td></tr>
+          <tr><td>Порядок слоёв</td><td>canvas (z 0) → .page (z 1) → шапка sticky (z 20) → меню (z 30) → тосты (z 40) → диалог (z 50).</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Hero</h3>
+        <p>Две колонки 1.05fr / .95fr: слева кикер или крошки, h1, лид, три факта, две кнопки; справа визуал — 3D-карта (виртуальная карта) или логотип с орбитами (страница сервиса). На инфостраницах визуал заменяется KPI-карточками или отсутствует.</p>
+        <div class="ds-demo" data-name="Hero copy"><div class="demo-in">
+          <div class="hero-copy" style="max-width:560px">
+            <nav class="crumbs" aria-label="Вы здесь"><a href="#">Каталог</a><span class="sep">/</span><a href="#"><img alt="" data-cat="ai">Нейросети</a></nav>
+            <h1>Cursor AI — оплата подписки из России</h1>
+            <p>AI-редактор кода: агенты, frontier-модели, MCP и cloud agents. Оплатите подписку виртуальной картой — реквизиты и инструкция придут на почту.</p>
+            <div class="facts"><div class="fact"><b>от $20</b><span>в месяц за платный план</span></div><div class="fact"><b>≤ 15 мин</b><span>выпуск карты</span></div><div class="fact"><b>9 планов</b><span>на выбор, включая командные</span></div></div>
+            <div class="hero-cta"><a class="btn btn-primary" href="#">Рассчитать и оформить</a><a class="btn btn-ghost" href="#">Как это работает</a></div>
+          </div>
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Отступы</td><td>Сверху clamp(48px, 7vw, 84px), снизу clamp(28px, 4vw, 44px); колонка копии — gap 22, до 64ch.</td></tr>
+          <tr><td>Факты</td><td>Три колонки с вертикальными разделителями, значение JetBrains Mono 19 500, подпись 12.5 <code>--text-4</code>; ≤ 620px — в столбик.</td></tr>
+          <tr><td>Кнопки</td><td>Primary ведёт к конфигуратору на этой же странице (якорь), ghost — «Как это работает». На мобильном обе на всю ширину.</td></tr>
+          <tr><td>Появление</td><td>Элементы копии поднимаются с задержкой 80 ms каждый, визуал — через 200 ms.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 19 БЛОКИ ====================== -->
+    <section class="ds-section" id="blocks">
+      <div class="ds-h"><span class="kicker"><i>19</i>Шаблоны</span><h2>Готовые блоки</h2><p>Панели, которые повторяются между страницами. Собираются из компонентов выше; здесь — состав и правила, чтобы новая страница собиралась из готового, а не рисовалась заново.</p></div>
+      <div class="ds-block">
+        <h3>Таймлайн «что будет после оплаты»</h3>
+        <div class="ds-demo" data-name="Timeline · 4 шага"><div class="demo-in col">
+          <div class="timeline in-view" style="padding-block-start:26px"><div class="tl-line"></div>
+            <div class="tl-item"><span class="tl-when">Сразу</span><h4>Платёж подтверждён</h4><p>Банк отвечает за секунды, страница обновляется сама.</p></div>
+            <div class="tl-item"><span class="tl-when">До 15 минут</span><h4>Карта выпущена</h4><p>Номер, срок и CVC — в письме на указанную почту.</p></div>
+            <div class="tl-item"><span class="tl-when">Вы</span><h4>Привязка к сервису</h4><p>В инструкции — шаги для вашего сервиса, включая адрес и индекс.</p></div>
+            <div class="tl-item"><span class="tl-when">Всегда</span><h4>Поддержка</h4><p>Если письма нет через 15 минут — пишем, найдём заказ по почте.</p></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>«Если что-то пойдёт не так»</h3>
+        <div class="ds-demo" data-name="Recovery · 3 плитки"><div class="demo-in col">
+          <div class="recovery">
+            <div class="rec-item"><h4>Письмо не пришло</h4><p>Проверьте «Спам», затем напишите в поддержку — найдём заказ по email.</p></div>
+            <div class="rec-item"><h4>Сервис не принял карту</h4><p>Чаще всего — адрес или индекс. В инструкции есть проверенные значения.</p></div>
+            <div class="rec-item"><h4>Ошиблись с номиналом</h4><p>Остаток на карте не пропадает — используйте для следующей оплаты.</p></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Состав блоков</h3>
+        <div class="spec-wrap"><table class="spec">
+          <thead><tr><th>Блок</th><th>Где</th><th>Из чего</th></tr></thead>
+          <tbody>
+            <tr><td>Hero</td><td>все страницы</td><td>кикер / крошки → h1 → лид → факты → 2 кнопки; справа 3D-карта, логотип с орбитами или KPI</td></tr>
+            <tr><td>Конфигуратор</td><td>карта, сервис</td><td>шаги 01–02 (плитки номинала или планов + сегмент «своя сумма», поле почты) слева, ведомость расчёта справа (sticky 372)</td></tr>
+            <tr><td>Витрина</td><td>карта, сервис, каталог, разделы</td><td>заголовок + поиск, чипы категорий, плитки-ссылки по 20, «Показать ещё», пустое состояние; только демонстрация, без покупки</td></tr>
+            <tr><td>Таймлайн</td><td>карта, сервис, «как это работает»</td><td>4 шага с временем, линия заливается при появлении в вьюпорте</td></tr>
+            <tr><td>Восстановление</td><td>карта, сервис, поддержка</td><td>3 плитки «если что-то пойдёт не так» с h4 и текстом</td></tr>
+            <tr><td>Категории</td><td>главная, каталог</td><td>сетка карточек категории (7 + виртуальная карта), иконка и счётчик из каталога</td></tr>
+            <tr><td>Сервисы раздела</td><td>section/*</td><td>крошки, hero с иконкой категории, сетка карточек сервисов, чипы других категорий</td></tr>
+            <tr><td>Шаги «как это работает»</td><td>главная, how-it-works, buy/*</td><td>нумерованные карточки 3–4 в ряд + акцентная информационная карточка</td></tr>
+            <tr><td>FAQ</td><td>главная (8), faq</td><td>аккордеон до 720px + карточка-ссылка в поддержку</td></tr>
+            <tr><td>Поддержка</td><td>главная, support, contacts</td><td>3 информационные карточки каналов (Telegram, Max, почта) с кнопкой ghost</td></tr>
+            <tr><td>Оформление</td><td>buy/amount → email → sbp → status</td><td>степпер, один шаг конфигуратора на экран, ведомость, QR-блок, баннер успеха + таймлайн</td></tr>
+            <tr><td>Кабинет</td><td>dashboard</td><td>боковое меню + чип пользователя, KPI, таблица карт и покупок, форма профиля, пустые состояния</td></tr>
+            <tr><td>Вход</td><td>login</td><td>панель 440px по центру: вкладки «Вход / Регистрация», поля, чекбокс, primary, ссылка «Забыли пароль»</td></tr>
+            <tr><td>Документы</td><td>documents, offer, privacy</td><td>карточки документов с бейджами и «Скачать»; текст документа — прозой до 64ch с h3-оглавлением</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Вход и регистрация</h3>
+        <div class="ds-demo" data-name="Auth panel · 440px"><div class="demo-in" style="justify-content:center">
+          <div class="calc" style="max-width:440px;width:100%;padding:26px">
+            <div class="tabs" role="tablist" aria-label="Вход или регистрация" style="margin-block-end:20px"><button type="button" role="tab" aria-selected="true">Вход</button><button type="button" role="tab" aria-selected="false">Регистрация</button></div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div class="field" style="max-width:none"><label for="lg1">Электронная почта</label><input id="lg1" type="email" autocomplete="email" placeholder="mail@example.ru"></div>
+              <div class="field" style="max-width:none"><label for="lg2">Пароль</label><div class="input-wrap"><input id="lg2" type="password" autocomplete="current-password"><button type="button" class="input-btn" aria-label="Показать пароль"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+              <label class="check"><input type="checkbox" checked><span class="box"></span><span>Запомнить меня</span></label>
+              <button type="button" class="btn btn-primary">Войти</button>
+              <p class="note" style="justify-content:center"><a href="#">Забыли пароль?</a></p>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ====================== 20 КАРТА СТРАНИЦ ====================== -->
+    <section class="ds-section" id="pages">
+      <div class="ds-h"><span class="kicker"><i>20</i>Шаблоны</span><h2>Карта страниц</h2><p>Все страницы текущего сайта и из каких блоков они собираются в редизайне. Статус показывает, что уже сделано как прототип.</p></div>
+      <div class="ds-block">
+        <div class="spec-wrap"><table class="spec">
+          <thead><tr><th>Страница</th><th>Файл</th><th>Блоки</th><th>Статус</th></tr></thead>
+          <tbody>
+            <tr><td>Виртуальная карта</td><td><code>virtual-card.html</code></td><td>hero с 3D-картой · конфигуратор (номинал + почта) · витрина · таймлайн · восстановление</td><td><span class="badge badge-ok">Прототип</span></td></tr>
+            <tr><td>Сервис</td><td><code>service/*/index.html</code> · 140</td><td>крошки · hero с логотипом · конфигуратор (планы + почта) · витрина категории · таймлайн · восстановление</td><td><span class="badge badge-ok">Прототип (Cursor)</span></td></tr>
+            <tr><td>Виртуальная карта · PrimeVue</td><td><code>_proto/vc-primevue.html</code></td><td>то же на компонентах PrimeVue с пресетом</td><td><span class="badge badge-ok">Прототип</span></td></tr>
+            <tr><td>Главная</td><td><code>index.html</code></td><td>hero с KPI · категории · сервисы (8) · «почему мы» (6) · шаги (4) · FAQ (8) · поддержка (3)</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Каталог</td><td><code>catalog.html</code></td><td>hero короткий · карточки категорий · витрина всех сервисов с поиском</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Раздел категории</td><td><code>section/*/index.html</code> · 7</td><td>крошки · hero с иконкой категории · карточки сервисов · чипы других категорий</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Как это работает</td><td><code>how-it-works.html</code></td><td>hero · нумерованные шаги (4) · информационные карточки · таймлайн · FAQ</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Оформление</td><td><code>buy/amount, email, sbp, status</code></td><td>степпер · шаг конфигуратора · ведомость · QR-блок · баннер успеха</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Тарифы</td><td><code>pricing.html</code></td><td>hero · информационные карточки · таблица планов · FAQ</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Поддержка · Контакты</td><td><code>support.html</code> · <code>contacts.html</code></td><td>hero · карточки каналов с кнопками · карточки-ссылки (FAQ, документы) · восстановление</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>FAQ</td><td><code>faq.html</code></td><td>hero · аккордеон по группам · карточка «не нашли ответ»</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Документы</td><td><code>documents, offer, privacy</code></td><td>карточки документов · текст документа с оглавлением</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Дорожная карта</td><td><code>roadmap.html</code></td><td>hero · вертикальный степпер по кварталам · информационные карточки</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Вход</td><td><code>login.html</code></td><td>панель входа по центру, без hero</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Кабинет</td><td><code>dashboard.html</code></td><td>боковое меню · KPI · таблицы карт и покупок · форма профиля · диалоги</td><td><span class="badge">В очереди</span></td></tr>
+            <tr><td>Дизайн-система</td><td>этот документ</td><td>—</td><td><span class="badge badge-info">v1.0</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 21 PRIMEVUE ====================== -->
+    <section class="ds-section" id="primevue">
+      <div class="ds-h"><span class="kicker"><i>21</i>Реализация</span><h2>PrimeVue и Nuxt</h2><p>Сайт переезжает на Nuxt 3 с PrimeVue 4 в styled-режиме. Пресет собран из токенов этого документа поверх Aura: <code>definePreset(Aura, MARSCAP_PRESET)</code>. Тёмная тема включается классом <code>.mc-dark</code> на <code>&lt;html&gt;</code>, светлая — его отсутствием; наши CSS-роли живут рядом и переключаются атрибутом <code>data-mc-theme</code>.</p></div>
+      <div class="ds-block">
+        <h3>Соответствие компонентов</h3>
+        <div class="spec-wrap"><table class="spec pv-map">
+          <thead><tr><th>В дизайн-системе</th><th>PrimeVue</th><th>Что переопределяется</th></tr></thead>
+          <tbody>
+            <tr><td>Кнопка primary / ghost / малая</td><td>Button · severity="secondary" outlined · size="small"</td><td>градиент и свечение primary, высоты 48 / 38, блик на hover — через <code>pv-bridge.css</code></td></tr>
+            <tr><td>Иконочная кнопка</td><td>Button · rounded text · aria-label</td><td>размер 38, рамка <code>--line-strong</code></td></tr>
+            <tr><td>Поле, почта, пароль</td><td>InputText · Password (toggleMask) · IconField + InputIcon</td><td>высота 48, фон <code>--surface</code>, кольцо фокуса 3px 30%</td></tr>
+            <tr><td>Число</td><td>InputNumber (mode="currency" или prefix="$")</td><td>то же + моноширинные цифры</td></tr>
+            <tr><td>Поиск</td><td>IconField + InputText type="search"</td><td>высота 44, иконка слева</td></tr>
+            <tr><td>Список / мультивыбор</td><td>Select · MultiSelect</td><td>панель — поднятый слой, элемент 8 10 радиус 9</td></tr>
+            <tr><td>Многострочное</td><td>Textarea autoResize</td><td>мин. высота 112</td></tr>
+            <tr><td>Чекбокс / радио / переключатель</td><td>Checkbox · RadioButton · ToggleSwitch</td><td>20px, радиус 6; переключатель 40×24</td></tr>
+            <tr><td>Сегмент</td><td>SelectButton (allowEmpty=false)</td><td>контейнер с рамкой, активная кнопка <code>--surface-2</code></td></tr>
+            <tr><td>Плитки номинала / плана / способа оплаты</td><td>SelectButton с <code>#option</code>-слотом</td><td>сетка, мин. высоты 56 / 88 / 64, галочка в углу</td></tr>
+            <tr><td>Чипы категорий</td><td>SelectButton или Chip + собственная прокрутка</td><td>pill 40px, иконка 22, счётчик</td></tr>
+            <tr><td>Вкладки</td><td>Tabs · TabList · Tab · TabPanels</td><td>подчёркивание 2px <code>--accent</code>, без фона</td></tr>
+            <tr><td>Крошки</td><td>Breadcrumb</td><td>13.5px, иконка категории 18</td></tr>
+            <tr><td>Пагинация</td><td>Paginator</td><td>38px, активная — 14% синего</td></tr>
+            <tr><td>Шаги</td><td>Stepper (linear) · Steps</td><td>точки 24, залитая линия у пройденных</td></tr>
+            <tr><td>Боковое меню, выпадающее меню</td><td>Menu · Menubar · TieredMenu</td><td>ссылки 14.5 радиус 8, текущая — 14% синего</td></tr>
+            <tr><td>Мобильная шторка</td><td>Drawer (position="right")</td><td>ширина 320, ссылки 44px</td></tr>
+            <tr><td>Карточки</td><td>Card или собственный компонент <code>McCard</code></td><td>шапки разновидностей проще как свои компоненты</td></tr>
+            <tr><td>Таблица</td><td>DataTable (sortable, paginator, rowHover)</td><td>шапка капителью, <code>.num</code> вправо, обёртка с радиусом 18</td></tr>
+            <tr><td>Ведомость расчёта</td><td>собственный <code>McCalc</code> (dl)</td><td>—</td></tr>
+            <tr><td>Бейдж</td><td>Tag (rounded) · Badge</td><td>точка 6px, фон 12% и рамка 40%</td></tr>
+            <tr><td>Баннер</td><td>Message (severity)</td><td>иконка 18, заголовок b, действия ссылками</td></tr>
+            <tr><td>Тост</td><td>Toast (position="bottom-right", life 5000)</td><td>ширина min(360px, 100vw − 32)</td></tr>
+            <tr><td>Диалог</td><td>Dialog (modal, dismissableMask) · ConfirmDialog</td><td>480px, футер справа</td></tr>
+            <tr><td>Тултип</td><td>v-tooltip</td><td>тёмный фон в обеих темах, 12.5px</td></tr>
+            <tr><td>Спиннер, полоса, скелет</td><td>ProgressSpinner · ProgressBar · Skeleton</td><td>18px 2px; 6px; шиммер по <code>--surface / --surface-2</code></td></tr>
+            <tr><td>Аккордеон</td><td>Accordion · AccordionPanel</td><td>плюс в круге 28, без фона панели</td></tr>
+            <tr><td>Пустое состояние</td><td>собственный <code>McEmpty</code></td><td>—</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Пресет</h3>
+        <p>Файл <code>pv-preset.js</code> (в Nuxt — <code>app/theme/marscap.ts</code>). Примитивы повторяют ряды выше, семантика указывает на них, компоненты получают только то, что отличается от Aura. Остальное — в <code>pv-bridge.css</code>, который приводит компоненты к виду из этого документа.</p>
+        <div class="ds-demo" data-name="pv-preset.js · фрагмент" data-nocode><div class="demo-in pad0"><pre class="ds-code" style="border:0;max-height:none;width:100%">import { definePreset } from '@primeuix/themes'
+import Aura from '@primeuix/themes/aura'
+
+export const Marscap = definePreset(Aura, {
+  primitive: {
+    borderRadius: { xs: '6px', sm: '8px', md: '12px', lg: '14px', xl: '18px' },
+    blue: { 300: '#97BEFF', 400: '#699FFF', 500: '#3D7EFC', 600: '#1A5FE5', 700: '#0244BE' },
+    ink:  { 50: '#F5F7FB', 100: '#EEF0F4', 300: '#C0C4CD', 500: '#7D8391', 700: '#384050', 800: '#222A3A', 900: '#0E1420', 950: '#090D18' }
+  },
+  semantic: {
+    primary: { 500: '{blue.500}', 600: '{blue.600}', 700: '{blue.700}' },
+    focusRing: { width: '2px', style: 'solid', color: '{primary.300}', offset: '2px' },
+    formField: { paddingX: '0.875rem', paddingY: '0.7rem', borderRadius: '{border.radius.md}' },
+    colorScheme: {
+      light: { primary: { color: '{primary.700}', hoverColor: '{primary.600}' },
+               formField: { background: '#EDF0F6', borderColor: '#CACED6', focusBorderColor: '{primary.500}' },
+               content: { background: '#FDFDFF', borderColor: '#DBDEE5' } },
+      dark:  { primary: { color: '{primary.600}', hoverColor: '{primary.500}' },
+               formField: { background: '#171E2C', borderColor: '#303848', focusBorderColor: '{primary.500}' },
+               content: { background: '#0E1420', borderColor: '#262E3D' } }
+    }
+  },
+  components: {
+    button: { root: { borderRadius: '{border.radius.md}', paddingX: '1.375rem', paddingY: '0.75rem', label: { fontWeight: '600' } } },
+    togglebutton: { root: { borderRadius: '{border.radius.lg}', padding: '0.875rem 1rem' } },
+    tabs: { tab: { padding: '0.55rem 0.9rem' }, tablist: { background: 'transparent' }, activeBar: { height: '2px' } },
+    toast: { root: { borderRadius: '{border.radius.md}', width: 'min(360px, calc(100vw - 32px))' } }
+  }
+})</pre></div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Подключение в Nuxt</h3>
+        <div class="ds-demo" data-name="nuxt.config.ts" data-nocode><div class="demo-in pad0"><pre class="ds-code" style="border:0;max-height:none;width:100%">// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@primevue/nuxt-module'],
+  css: ['~/assets/base.css', '~/assets/lib.css', '~/assets/pv-bridge.css'],
+  primevue: {
+    options: {
+      ripple: false,
+      theme: { preset: Marscap, options: { darkModeSelector: '.mc-dark', cssLayer: false } }
+    }
+  },
+  app: { head: { htmlAttrs: { 'data-mc-theme': 'dark', class: 'mc-dark' } } }
+})
+
+// composables/useTheme.ts — переключатель в шапке
+export const useTheme = () => {
+  const theme = useState('mc-theme', () => 'dark')
+  const apply = (t) => {
+    document.documentElement.dataset.mcTheme = t
+    document.documentElement.classList.toggle('mc-dark', t !== 'light')
+    localStorage.setItem('mc-theme', t)
+  }
+  return { theme, toggle: () => apply(theme.value = theme.value === 'light' ? 'dark' : 'light') }
+}</pre></div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Порядок CSS</td><td><code>base.css</code> (токены, база) → <code>lib.css</code> (компоненты) → тема PrimeVue → <code>pv-bridge.css</code> (мост). Мост всегда последний, без <code>cssLayer</code>, чтобы побеждать по специфичности.</td></tr>
+          <tr><td>Тема до отрисовки</td><td>Инлайн-скрипт в <code>&lt;head&gt;</code> читает <code>localStorage('mc-theme')</code> и ставит атрибут и класс до первого кадра — без вспышки.</td></tr>
+          <tr><td>Галактика</td><td>Клиентский компонент <code>&lt;GalaxyBg client-only /&gt;</code> с <code>galaxy-bg.v58.js</code>; на страницах кабинета, входа и документов не подключается.</td></tr>
+          <tr><td>Иконки</td><td>Свой набор SVG-компонентов (штрих 1,7); PrimeIcons не подключаются, чтобы не смешивать два стиля.</td></tr>
+          <tr><td>Каталог</td><td>JSON из <code>assets/services</code> и <code>category-icons</code> собирается на этапе сборки; яркость логотипа считается там же и даёт флаг <code>on-dark</code>.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 22 ТЕКСТ ====================== -->
+    <section class="ds-section" id="writing">
+      <div class="ds-h"><span class="kicker"><i>22</i>Реализация</span><h2>Текст и контент</h2><p>Интерфейс говорит коротко, по делу и на «вы». Он объясняет, что произойдёт, называет сроки и суммы точно и не обещает того, чего не контролирует.</p></div>
+      <div class="ds-block">
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Тон</td><td>Спокойный и конкретный. Без восклицательных знаков, без «Упс», без «мы рады». Юмор не используется — речь о деньгах.</td></tr>
+          <tr><td>Обращение</td><td>«Вы» со строчной. Не «пользователь», не «клиент» — в интерфейсе нет третьего лица.</td></tr>
+          <tr><td>Заголовки</td><td>Именное или глагольное, до 6 слов, без точки: «Два шага до карты», «Что будет после оплаты».</td></tr>
+          <tr><td>Кнопки</td><td>Глагол в инфинитиве + результат: «Оплатить 2 407 ₽», «Выпустить карту», «Написать в поддержку».</td></tr>
+          <tr><td>Кикеры</td><td>1–3 слова, без дефиса и точки: «Расчёт и оформление», «Шаг 01».</td></tr>
+          <tr><td>Числа</td><td>Тысячи через неразрывный пробел, десятичные через запятую в рублях и курсе (80,2254 ₽), через точку в долларах ($7.99). Знак валюты после числа для ₽, перед — для $.</td></tr>
+          <tr><td>Сроки</td><td>Конкретно: «до 15 минут», «в течение часа», не «скоро» и не «в ближайшее время».</td></tr>
+          <tr><td>Названия сервисов</td><td>Как у самого сервиса: ChatGPT Plus, Cursor AI, Midjourney. Планы — как на сайте сервиса, без перевода: Pro, Teams, Standard.</td></tr>
+          <tr><td>Ошибки</td><td>Что случилось + как исправить, рядом с местом. См. раздел 14.</td></tr>
+          <tr><td>Пустые состояния</td><td>Что здесь бывает + один следующий шаг. См. раздел 16.</td></tr>
+          <tr><td>Юридическое</td><td>Одна строка под кнопкой оплаты: «Нажимая «Оплатить», вы принимаете условия оферты» со ссылкой. Не чекбокс.</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Словарь</h3>
+        <div class="spec-wrap"><table class="spec"><thead><tr><th>Пишем</th><th>Не пишем</th></tr></thead><tbody>
+          <tr><td>виртуальная карта</td><td>виртуалка, VCC, карточка</td></tr>
+          <tr><td>номинал</td><td>сумма карты, баланс (до выпуска)</td></tr>
+          <tr><td>реквизиты карты</td><td>данные карты, данные по карте</td></tr>
+          <tr><td>оплатить через СБП</td><td>оплатить по СБП, СБП-оплата</td></tr>
+          <tr><td>почта, электронная почта</td><td>email в тексте (допустим в подписи поля), e-mail, мейл</td></tr>
+          <tr><td>привязать карту к сервису</td><td>подключить, прикрепить, засетапить</td></tr>
+          <tr><td>поддержка</td><td>саппорт, техподдержка, служба поддержки</td></tr>
+          <tr><td>курс ЦБ</td><td>курс ЦБ РФ, официальный курс, курс банка</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 23 ДОСТУПНОСТЬ ====================== -->
+    <section class="ds-section" id="a11y">
+      <div class="ds-h"><span class="kicker"><i>23</i>Реализация</span><h2>Доступность</h2><p>Цель — WCAG 2.2 AA. Список ниже проверяется на каждой странице перед публикацией; большинство пунктов уже встроено в компоненты, но их легко сломать при сборке.</p></div>
+      <div class="ds-block">
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Контраст</td><td>Текст ≥ 4,5:1, крупный текст и элементы управления ≥ 3:1 в обеих темах. <code>--text-4</code> не используется на плитках.</td></tr>
+          <tr><td>Клавиатура</td><td>Всё интерактивное — <code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code>, <code>&lt;input&gt;</code>. Порядок табуляции совпадает с визуальным. Фокус видим: кольцо 2px <code>--focus</code>.</td></tr>
+          <tr><td>Имена</td><td>Иконочные кнопки — <code>aria-label</code>. Поля — <code>&lt;label for&gt;</code>. Поиск — <code>aria-label</code>. Логотипы в плитках — <code>alt=""</code>, имя сервиса в тексте рядом.</td></tr>
+          <tr><td>Состояния</td><td>Выбранное — <code>aria-pressed</code> / <code>aria-selected</code> / <code>aria-current</code>; ошибка — <code>aria-invalid</code> + <code>aria-describedby</code>; загрузка — <code>aria-busy</code>; переключатель — <code>role="switch"</code>.</td></tr>
+          <tr><td>Живые области</td><td>Итог расчёта и статус — <code>aria-live="polite"</code>; тосты — <code>role="status"</code>, ошибки — <code>role="alert"</code>; область создаётся заранее.</td></tr>
+          <tr><td>Диалоги</td><td>Фокус внутрь и обратно, Esc закрывает, фон инертен (<code>inert</code>), заголовок связан через <code>aria-labelledby</code>.</td></tr>
+          <tr><td>Движение</td><td>Всё внутри <code>prefers-reduced-motion: no-preference</code>; карта, орбиты и галактика останавливаются, скелеты и спиннеры замирают.</td></tr>
+          <tr><td>Зона касания</td><td>≥ 44px у всех целей на тач; малые кнопки 38 добираются отступами.</td></tr>
+          <tr><td>Масштаб</td><td>Страница работает при 200% и ширине 320px без горизонтального скролла; шрифт полей 16px.</td></tr>
+          <tr><td>Заголовки</td><td>Один h1 на страницу, уровни без пропусков, секции — <code>&lt;section&gt;</code> с заголовком, навигация — <code>&lt;nav aria-label&gt;</code>.</td></tr>
+          <tr><td>Цвет</td><td>Статус всегда дублируется точкой, иконкой или текстом; ошибка поля — рамка и текст.</td></tr>
+          <tr><td>Язык</td><td><code>&lt;html lang="ru"&gt;</code>; названия сервисов и планов на латинице без <code>lang</code>-переключения.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <footer class="ds-footer"><span>Дизайн-система Marscap · v1.0 · 15.09.2026</span><span>Токены: base.css · lib.css · pv-preset.js · pv-bridge.css</span></footer>
+  </main>
+</div>
+<div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>

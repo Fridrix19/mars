@@ -1,0 +1,516 @@
+(function(){
+  'use strict';
+  var $ = MC.$, RATE = MC.RATE, BASE = window.MC_BASE || '';
+  var rub = MC.rub, esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); };
+  var usdf = function(u){ return '$' + (Math.abs(u - Math.round(u)) < 1e-9 ? u : u.toFixed(2)); };
+  function ago(d, h){ var t = new Date(); t.setDate(t.getDate() - (d || 0)); if (h != null) t.setHours(h, (d * 7 + 13) % 60, 0, 0); return t; }
+  function fmtD(t, withTime){ t = new Date(t); var s = t.toLocaleString('ru-RU', { day: 'numeric', month: 'short' }).replace('.', ''); return withTime ? s + ', ' + t.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : s; }
+  function ico(id){ return '<svg><use href="#i-' + id + '"/></svg>'; }
+  function svc(name){ var c = MC.CATALOG.services; for (var i = 0; i < c.length; i++) if (c[i].n === name) return c[i]; return null; }
+  function svcImg(name, cls){ var s = svc(name); return s ? '<img class="' + (cls || 'ord-ico') + (s.d ? ' on-dark' : '') + '" src="' + s.l + '" alt="">' : ''; }
+  function svcHref(name){ var s = svc(name); return s ? BASE + s.h : BASE + 'catalog.html'; }
+  function total(u){ return MC.charged(u) * RATE; }
+
+  /* ——— сессия ——— */
+  var session = null; try { session = JSON.parse(localStorage.getItem('mc-session') || 'null'); } catch (e) {}
+  var USER = { name: 'Фёдор', id: (session && session.id) || '+7 900 ···-··-77', email: 'f•••••c@gmail.com', phone: '+7 900 ···-··-77', kyc: 'basic', mfa: false, since: ago(310) };
+  if (/@/.test(USER.id)) USER.email = USER.id.replace(/^(.).*(.@.*)$/, '$1•••••$2'); else USER.phone = USER.id;
+  var demo = !session;
+
+  /* ——— данные прототипа ——— */
+  var CARDS = [
+    { id: 'c1', last4: '4821', brand: 'Visa', status: 'active', balance: 74.30, exp: '09/27', issued: ago(112), pan: '4400 1234 5678 4821', cvv: '731' },
+    { id: 'c2', last4: '0157', brand: 'Mastercard', status: 'frozen', balance: 0, exp: '03/27', issued: ago(240), pan: '5536 9100 2244 0157', cvv: '208' }
+  ];
+  var ORDERS = [
+    { id: 'MC-1042', kind: 'topup', title: 'Пополнение карты', sub: 'Visa •• 4821', usd: 150, status: 'action', created: ago(0, 10), card: 'c1', pay: 'P-5581',
+      action: { text: 'Для суммы от $150 нужна расширенная верификация', btn: 'Пройти', go: 'kyc' },
+      tl: [['Заказ создан', ago(0, 10), 'ok'], ['Оплачен через СБП', ago(0, 10), 'ok', 'Платёж P-5581 · ' + rub(total(150))], ['Верификация', null, 'warn', 'Ждём подтверждение личности — займёт 3–5 минут'], ['Зачисление на карту', null, 'todo']] },
+    { id: 'MC-1041', kind: 'svc', svc: 'ChatGPT Plus', title: 'ChatGPT Plus', sub: 'Plus · $20/month', usd: 20, status: 'work', created: ago(0, 9), pay: 'P-5579',
+      tl: [['Заказ создан', ago(0, 9), 'ok'], ['Оплачен через СБП', ago(0, 9), 'ok', 'Платёж P-5579 · ' + rub(total(20))], ['Оформляем подписку', null, 'cur', 'Обычно 10–30 минут в рабочее время'], ['Доступ выдан', null, 'todo']] },
+    { id: 'MC-1040', kind: 'svc', svc: 'Midjourney', title: 'Midjourney', sub: 'Standard · $30/мес', usd: 30, status: 'new', created: ago(1, 18), pay: 'P-5570',
+      tl: [['Заказ создан', ago(1, 18), 'ok'], ['Оплата', null, 'cur', 'Расчёт действует ещё 40 минут'], ['Оформляем подписку', null, 'todo'], ['Доступ выдан', null, 'todo']] },
+    { id: 'MC-1039', kind: 'svc', svc: 'Cursor AI', title: 'Cursor Pro', sub: 'Pro · $20/month', usd: 20, status: 'done', created: ago(6, 12), done: ago(6, 13), pay: 'P-5544', cred: 'Подписка активирована на вашем аккаунте Cursor. Письмо с подтверждением — на ' + USER.email + '.',
+      tl: [['Заказ создан', ago(6, 12), 'ok'], ['Оплачен через СБП', ago(6, 12), 'ok'], ['Подписка оформлена', ago(6, 13), 'ok'], ['Доступ выдан', ago(6, 13), 'ok', 'Акт сформирован']] },
+    { id: 'MC-1033', kind: 'issue', title: 'Выпуск карты', sub: 'Visa •• 4821 · $50', usd: 50, status: 'done', created: ago(112, 15), done: ago(112, 15), pay: 'P-5210', card: 'c1', cred: 'Карта выпущена и пополнена на $50. Реквизиты — в разделе «Мои карты».',
+      tl: [['Заказ создан', ago(112, 15), 'ok'], ['Оплачен', ago(112, 15), 'ok'], ['Карта выпущена', ago(112, 15), 'ok'], ['Зачислено $50', ago(112, 15), 'ok']] },
+    { id: 'MC-1028', kind: 'svc', svc: 'Spotify', title: 'Spotify', sub: 'Individual · $12/month', usd: 12, status: 'refund', created: ago(40, 11), pay: 'P-5120', refund: 'R-118',
+      tl: [['Заказ создан', ago(40, 11), 'ok'], ['Оплачен', ago(40, 11), 'ok'], ['Не удалось оформить', ago(40, 14), 'err', 'Сервис отклонил регион аккаунта'], ['Возврат выполнен', ago(38, 10), 'ok', 'R-118 · ' + rub(total(12)) + ' тем же способом']] },
+    { id: 'MC-1021', kind: 'svc', svc: 'Netflix', title: 'Netflix', sub: 'Standard · $16/month', usd: 16, status: 'cancel', created: ago(75, 20),
+      tl: [['Заказ создан', ago(75, 20), 'ok'], ['Отменён до оплаты', ago(75, 21), 'err', 'Отменили вы']] }
+  ];
+  var PAYMENTS = [
+    { id: 'P-5581', order: 'MC-1042', method: 'СБП', rubv: total(150), status: 'ok', at: ago(0, 10) },
+    { id: 'P-5579', order: 'MC-1041', method: 'СБП', rubv: total(20), status: 'ok', at: ago(0, 9) },
+    { id: 'P-5570', order: 'MC-1040', method: 'СБП', rubv: total(30), status: 'pending', at: ago(1, 18) },
+    { id: 'P-5544', order: 'MC-1039', method: 'СБП', rubv: total(20), status: 'ok', at: ago(6, 12) },
+    { id: 'P-5210', order: 'MC-1033', method: 'Карта РФ', rubv: total(50), status: 'ok', at: ago(112, 15) },
+    { id: 'P-5120', order: 'MC-1028', method: 'СБП', rubv: total(12), status: 'refunded', at: ago(40, 11) }
+  ];
+  var REFUNDS = [{ id: 'R-118', pay: 'P-5120', order: 'MC-1028', why: 'Сервис не подключился', rubv: total(12), status: 'done', at: ago(40, 14), doneAt: ago(38, 10) }];
+  var TICKETS = [
+    { id: 'T-207', subj: 'Не вижу подписку в аккаунте ChatGPT', order: 'MC-1041', status: 'answered', at: ago(0, 9),
+      msgs: [{ me: 1, t: 'Оплатил заказ час назад, в аккаунте пока бесплатный план. Это нормально?', at: ago(0, 9) }, { me: 0, t: 'Здравствуйте! Да, заказ MC-1041 у нас в работе — оформление занимает до 30 минут. Как только подписка активируется, статус заказа изменится, а на почту придёт письмо.', at: ago(0, 9) }] },
+    { id: 'T-198', subj: 'Возврат за Spotify', order: 'MC-1028', status: 'closed', at: ago(40, 14),
+      msgs: [{ me: 1, t: 'Заказ не оформился, хочу вернуть деньги.', at: ago(40, 14) }, { me: 0, t: 'Оформили возврат R-118 на платёж P-5120. Деньги вернутся тем же способом в течение 1–3 дней.', at: ago(40, 15) }, { me: 0, t: 'Возврат выполнен. Обращение закрываем — если что, напишите снова.', at: ago(38, 10) }] }
+  ];
+  var DOCS = [
+    { name: 'Оферта', ver: '2.3', at: ago(12, 14), href: BASE + 'legal-files/offer.pdf', hist: ['2.2 — принята ' + fmtD(ago(190)), '2.0 — принята ' + fmtD(ago(310))] },
+    { name: 'Политика обработки персональных данных', ver: '1.4', at: ago(12, 14), href: BASE + 'legal-files/privacy.pdf', hist: ['1.3 — принята ' + fmtD(ago(310))] },
+    { name: 'Согласие на уведомления о заказах', ver: '1.0', at: ago(310), hist: [] }
+  ];
+  var SESSIONS = [
+    { id: 's1', cur: 1, dev: 'Windows · Chrome', place: 'Москва', ip: '93.81.·.·', at: 'сейчас', icon: 'laptop' },
+    { id: 's2', dev: 'iPhone · Safari', place: 'Москва', ip: '176.59.·.·', at: fmtD(ago(1), true), icon: 'phone' },
+    { id: 's3', dev: 'Android · Chrome', place: 'Алматы', ip: '95.59.·.·', at: fmtD(ago(2), true), icon: 'phone', sus: 1 }
+  ];
+  var NOTIFS = [
+    { t: 'Нужна верификация по заказу MC-1042', s: 'Сумма от $150 — подтвердите личность, займёт несколько минут', at: ago(0, 10), go: 'kyc', unread: 1 },
+    { t: 'Ответ поддержки по обращению T-207', s: 'Заказ MC-1041 в работе, до 30 минут', at: ago(0, 9), go: 'support:T-207', unread: 1 },
+    { t: 'Вход с нового устройства', s: 'Android · Chrome, Алматы. Это были не вы? Завершите сессию', at: ago(2), go: 'profile:sessions', unread: 1 },
+    { t: 'Заказ MC-1040 ждёт оплаты', s: 'Midjourney Standard · расчёт зафиксирован', at: ago(1, 18), go: 'order:MC-1040' },
+    { t: 'Cursor Pro оформлен', s: 'Доступ выдан, акт доступен в документах', at: ago(6, 13), go: 'order:MC-1039' }
+  ];
+  var ST = { new: ['Ожидает оплаты', 'badge-plain'], paid: ['Оплачен', 'badge-info'], work: ['В работе', 'badge-info'], action: ['Нужно действие', 'badge-warn'], done: ['Выполнен', 'badge-ok'], cancel: ['Отменён', 'badge-plain'], refund: ['Возврат', 'badge-plain'] };
+  var PST = { ok: ['Проведён', 'badge-ok'], pending: ['Ожидает', 'badge-warn'], refunded: ['Возвращён', 'badge-plain'], failed: ['Отклонён', 'badge-err'] };
+  var seq = 1043, pseq = 5582, tseq = 208, rseq = 119;
+
+  function badge(pair){ return '<span class="badge ' + pair[1] + '">' + pair[0] + '</span>'; }
+  function order(id){ for (var i = 0; i < ORDERS.length; i++) if (ORDERS[i].id === id) return ORDERS[i]; }
+  function card(id){ for (var i = 0; i < CARDS.length; i++) if (CARDS[i].id === id) return CARDS[i]; }
+  function pay(id){ for (var i = 0; i < PAYMENTS.length; i++) if (PAYMENTS[i].id === id) return PAYMENTS[i]; }
+  function isActive(o){ return o.status !== 'done' && o.status !== 'cancel' && o.status !== 'refund'; }
+  function ordIcon(o){ return o.kind === 'svc' ? svcImg(o.svc) : '<span class="ord-ico vc">' + ico(o.kind === 'issue' ? 'plus' : 'card') + '</span>'; }
+  function progress(o){ var n = o.tl.length, k = 0; o.tl.forEach(function(s){ if (s[2] === 'ok') k++; }); return Math.round(k / n * 100); }
+
+  /* ——— тосты и модалки ——— */
+  function toast(title, body, kind){
+    var st = $('toasts'), t = document.createElement('div'); t.className = 'toast toast-' + (kind || 'info');
+    t.innerHTML = ico(kind === 'ok' ? 'check' : kind === 'err' ? 'warn' : 'info') + '<div><b>' + esc(title) + '</b>' + esc(body || '') + '</div><button type="button" class="x" aria-label="Закрыть">×</button>';
+    t.querySelector('.x').addEventListener('click', function(){ t.remove(); }); st.appendChild(t); setTimeout(function(){ t.remove(); }, 4500);
+  }
+  var lastFocus = null;
+  function modal(o){
+    lastFocus = document.activeElement;
+    $('mTitle').textContent = o.title; $('mSub').textContent = o.sub || ''; $('mSub').hidden = !o.sub;
+    $('mBody').innerHTML = o.body || ''; var f = $('mFoot'); f.innerHTML = '';
+    (o.foot || [{ label: 'Закрыть' }]).forEach(function(b){
+      var el = document.createElement('button'); el.type = 'button'; el.className = 'btn ' + (b.cls || 'btn-ghost'); el.textContent = b.label;
+      el.addEventListener('click', function(){ if (b.onClick && b.onClick(el) === false) return; if (!b.keep) closeModal(); }); f.appendChild(el);
+    });
+    $('modal').hidden = false; var first = $('mBody').querySelector('input,button,select,textarea'); (first || $('mClose')).focus();
+    if (o.onOpen) o.onOpen();
+  }
+  function closeModal(){ $('modal').hidden = true; if (lastFocus) lastFocus.focus(); }
+  $('mClose').addEventListener('click', closeModal);
+  $('modal').addEventListener('click', function(e){ if (e.target === $('modal')) closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('modal').hidden) closeModal(); });
+
+  /* 6 полей кода: возвращает разметку, wireOtp вешает поведение */
+  function otpHtml(id){ var s = '<div class="otp" id="' + id + '">'; for (var i = 1; i <= 6; i++) s += '<input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Цифра ' + i + '">'; return s + '</div>'; }
+  function wireOtp(box, done){
+    var ins = [].slice.call(box.querySelectorAll('input'));
+    ins.forEach(function(inp, i){
+      inp.addEventListener('input', function(){
+        var v = inp.value.replace(/\D/g, ''); if (v.length > 1){ v.split('').slice(0, 6 - i).forEach(function(ch, k){ ins[i + k].value = ch; ins[i + k].classList.add('is-filled'); }); var n = Math.min(i + v.length, 5); ins[n].focus(); }
+        else { inp.value = v; inp.classList.toggle('is-filled', !!v); if (v && i < 5) ins[i + 1].focus(); }
+        var code = ins.map(function(x){ return x.value; }).join(''); if (code.length === 6) done(code, box, ins);
+      });
+      inp.addEventListener('keydown', function(e){ if (e.key === 'Backspace' && !inp.value && i > 0){ ins[i - 1].value = ''; ins[i - 1].classList.remove('is-filled'); ins[i - 1].focus(); } });
+    });
+    ins[0].focus();
+  }
+  /* step-up: подтверждение кодом перед чувствительным действием */
+  function stepUp(title, sub, onOk){
+    modal({ title: title, sub: sub || 'Код отправили на ' + USER.id + '. Прототип: подойдут любые 6 цифр, кроме 000000.', body: otpHtml('suBoxes') + '<p class="hint auth-center">Код действует 5 минут</p>', foot: [{ label: 'Отмена' }],
+      onOpen: function(){ wireOtp($('suBoxes'), function(code, box){ if (code === '000000'){ box.classList.add('is-err'); setTimeout(function(){ box.classList.remove('is-err'); box.querySelectorAll('input').forEach(function(x){ x.value = ''; x.classList.remove('is-filled'); }); box.querySelector('input').focus(); }, 500); return; } box.classList.add('is-ok'); setTimeout(function(){ closeModal(); onOk(); }, 350); }); } });
+  }
+
+  /* ——— роутер ——— */
+  var SCREENS = ['overview', 'new', 'orders', 'order', 'cards', 'payments', 'kyc', 'profile', 'support', 'docs'];
+  var cur = null;
+  function go(id, param, opts){
+    opts = opts || {};
+    var navId = id === 'order' ? 'orders' : id;
+    SCREENS.forEach(function(s){ var el = $('s-' + s); if (el) el.hidden = s !== id; });
+    document.querySelectorAll('[data-go]').forEach(function(b){
+      var on = b.getAttribute('data-go') === navId;
+      if (b.closest('.cab-nav')) b.classList.toggle('is-active', on);
+      if (b.closest('.cab-tabbar')){ if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }
+    });
+    var sc = $('s-' + id); if (sc && !MC.reduce){ sc.style.animation = 'none'; void sc.offsetWidth; sc.style.animation = ''; }
+    var render = R[id]; if (render) render(param, opts);
+    cur = id;
+    var hash = '#' + id + (param ? ':' + param : '');
+    if (location.hash !== hash) history.replaceState(null, '', hash);
+    if (!opts.keepScroll) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    closeSheet();
+  }
+  function route(){ var h = location.hash.replace('#', ''), p = h.split(':'); if (SCREENS.indexOf(p[0]) < 0) p = ['overview']; go(p[0], p[1]); }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-go]'); if (!b || b.closest('.tk')) return;
+    e.preventDefault();
+    var id = b.getAttribute('data-go'), p = id.split(':');
+    if (b.getAttribute('data-prod')) W.prod = b.getAttribute('data-prod'), W.step = 1;
+    go(p[0], p[1]);
+  });
+  window.addEventListener('hashchange', route);
+
+  /* ——— мобильный лист «Ещё» ——— */
+  var sheet = $('cabSheet'), more = $('cabMore');
+  function openSheet(){ sheet.hidden = false; more.setAttribute('aria-expanded', 'true'); requestAnimationFrame(function(){ sheet.classList.add('in'); }); }
+  function closeSheet(){ if (sheet.hidden) return; sheet.classList.remove('in'); more.setAttribute('aria-expanded', 'false'); setTimeout(function(){ sheet.hidden = true; }, MC.reduce ? 0 : 260); }
+  more.addEventListener('click', function(){ sheet.hidden ? openSheet() : closeSheet(); });
+  sheet.querySelectorAll('[data-cab-close]').forEach(function(el){ el.addEventListener('click', closeSheet); });
+
+  /* ——— шапка: пользователь, счётчики ——— */
+  function counters(){
+    var act = ORDERS.filter(function(o){ return o.status === 'action' || o.status === 'new'; }).length + (USER.kyc === 'more' ? 1 : 0);
+    var map = { action: act, orders: ORDERS.filter(isActive).length, cards: CARDS.filter(function(c){ return c.status === 'active'; }).length, tickets: TICKETS.filter(function(t){ return t.status !== 'closed'; }).length };
+    document.querySelectorAll('[data-cnt]').forEach(function(el){ var k = el.getAttribute('data-cnt'), v = map[k]; el.textContent = v || ''; el.classList.toggle('hot', k === 'action' && v > 0); });
+    $('navKyc').textContent = { none: '!', basic: '', pending: '…', full: '✓', more: '!' }[USER.kyc] || '';
+    $('bellDot').hidden = !NOTIFS.some(function(n){ return n.unread; });
+    $('uName').textContent = USER.name; $('uAvatar').textContent = USER.name.charAt(0).toUpperCase(); $('uId').textContent = USER.id; $('uId').title = demo ? 'Демо-режим: войдите, чтобы увидеть свои данные' : '';
+    var hr = new Date().getHours(); $('hello').textContent = (hr < 5 ? 'Доброй ночи' : hr < 12 ? 'Доброе утро' : hr < 18 ? 'Добрый день' : 'Добрый вечер') + ', ' + USER.name;
+  }
+
+  var R = {};
+  /* ===== Обзор ===== */
+  R.overview = function(){
+    counters();
+    var acts = [];
+    ORDERS.forEach(function(o){ if (o.status === 'action') acts.push({ cls: '', ico: 'warn', b: o.title + ' · ' + o.id, s: o.action.text, btn: o.action.btn, go: o.action.go }); if (o.status === 'new') acts.push({ cls: 'info', ico: 'pay', b: 'Оплатите ' + o.title + ' · ' + o.id, s: 'К оплате ' + rub(total(o.usd)) + ' — расчёт зафиксирован', btn: 'Оплатить', go: 'order:' + o.id }); });
+    if (SESSIONS.some(function(s){ return s.sus; })) acts.push({ cls: 'err', ico: 'shield', b: 'Вход с нового устройства', s: 'Android · Chrome, Алматы. Если это не вы — завершите сессию и смените пароль', btn: 'Проверить', go: 'profile:sessions' });
+    $('ovActions').innerHTML = acts.map(function(a){ return '<div class="act ' + a.cls + '">' + ico(a.ico) + '<div><b>' + esc(a.b) + '</b><span>' + esc(a.s) + '</span></div><button type="button" class="btn btn-ghost" data-go="' + a.go + '">' + a.btn + '</button></div>'; }).join('');
+    var m = new Date().getMonth(), spent = 0; PAYMENTS.forEach(function(p){ if (p.status === 'ok' && new Date(p.at).getMonth() === m) spent += p.rubv; });
+    var bal = 0; CARDS.forEach(function(c){ if (c.status === 'active') bal += c.balance; });
+    var openT = TICKETS.filter(function(t){ return t.status !== 'closed'; }).length;
+    $('ovKpis').innerHTML =
+      '<button type="button" class="kpi k-btn" data-go="orders"><span class="k">Активные заказы</span><span class="v">' + ORDERS.filter(isActive).length + '</span><span class="d">' + (acts.length ? acts.length + ' ' + MC.plural(acts.length, ['требует', 'требуют', 'требуют']) + ' действия' : 'всё идёт по плану') + '</span></button>' +
+      '<button type="button" class="kpi k-btn" data-go="cards"><span class="k">На картах</span><span class="v">' + usdf(bal) + '</span><span class="d">' + CARDS.filter(function(c){ return c.status === 'active'; }).length + ' активная · ' + CARDS.filter(function(c){ return c.status === 'frozen'; }).length + ' заморожена</span></button>' +
+      '<button type="button" class="kpi k-btn" data-go="payments"><span class="k">Оплачено в этом месяце</span><span class="v">' + rub(spent) + '</span><span class="d">' + PAYMENTS.filter(function(p){ return p.status === 'ok' && new Date(p.at).getMonth() === m; }).length + ' платежа</span></button>' +
+      '<button type="button" class="kpi k-btn" data-go="support"><span class="k">Обращения</span><span class="v">' + openT + '</span><span class="d">' + (openT ? 'есть ответ оператора' : 'открытых нет') + '</span></button>';
+    var act = ORDERS.filter(isActive).slice(0, 4);
+    $('ovOrders').innerHTML = act.length ? act.map(ordRow).join('') : '<div class="empty"><span class="ico">' + ico('orders') + '</span><b>Активных заказов нет</b><p>Пополните карту или выберите сервис в каталоге.</p></div>';
+    $('ovCards').innerHTML = CARDS.map(function(c){ return '<button type="button" class="ov-card" data-go="cards">' + cbHtml(c, true) + '<span class="ov-card-t"><b>' + c.brand + ' •• ' + c.last4 + '</b><span>' + (c.status === 'active' ? 'Активна · баланс ' + usdf(c.balance) : 'Заморожена') + '</span><span class="mono">до ' + c.exp + '</span></span></button>'; }).join('');
+    renderNotifs();
+    renderQuick();
+  };
+  function ordRow(o){
+    var p = progress(o);
+    return '<button type="button" class="ord ' + o.status + '" data-go="order:' + o.id + '">' + ordIcon(o) + '<span class="ord-t"><b>' + esc(o.title) + '</b><span class="mono">' + o.id + '</span></span><span class="ord-s"><span>' + esc(o.sub) + '</span><span>' + fmtD(o.created, true) + '</span></span><span class="ord-r"><span class="sum">' + rub(total(o.usd)) + '</span>' + badge(ST[o.status]) + '</span>' + (isActive(o) || o.status === 'done' ? '<span class="ord-prog"><i style="--v:' + p + '%"></i></span>' : '') + '</button>';
+  }
+  function renderNotifs(){
+    $('ovNotif').innerHTML = NOTIFS.map(function(n, i){ return '<li class="' + (n.unread ? 'unread' : '') + '" data-n="' + i + '">' + ico(n.unread ? 'bell' : 'check') + '<b>' + esc(n.t) + '</b><span>' + esc(n.s) + '</span><time>' + fmtD(n.at, true) + '</time></li>'; }).join('');
+    $('ovNotif').querySelectorAll('li').forEach(function(li){ li.addEventListener('click', function(){ var n = NOTIFS[+li.getAttribute('data-n')]; n.unread = 0; var p = n.go.split(':'); go(p[0], p[1]); }); });
+  }
+  $('readAll').addEventListener('click', function(){ NOTIFS.forEach(function(n){ n.unread = 0; }); renderNotifs(); counters(); });
+
+  /* быстрый заказ */
+  var DENOMS = [50, 75, 100, 150, 200], qUsd = 50;
+  function renderQuick(){
+    $('qDenoms').innerHTML = DENOMS.map(function(d){ return '<button type="button" aria-pressed="' + (d === qUsd) + '" data-d="' + d + '">$' + d + '</button>'; }).join('');
+    $('qDenoms').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ qUsd = +b.getAttribute('data-d'); renderQuick(); }); });
+    $('qNom').textContent = usdf(qUsd); $('qFee').textContent = rub(total(qUsd) - qUsd * RATE); $('qTot').textContent = rub(total(qUsd)); MC.bump($('qTot'));
+  }
+  $('qTabs').querySelectorAll('[role="tab"]').forEach(function(t){ t.addEventListener('click', function(){ $('qTabs').querySelectorAll('[role="tab"]').forEach(function(x){ x.setAttribute('aria-selected', x === t); }); var s = t.getAttribute('data-q') === 'svc'; $('qCard').hidden = s; $('qSvc').hidden = !s; if (s) $('qSearch').focus(); }); });
+  $('qGo').addEventListener('click', function(){ W = { prod: 'topup', card: 'c1', usd: qUsd, step: 3 }; go('new'); });
+  function svcSearch(input, out){
+    input.addEventListener('input', function(){
+      var q = input.value.trim().toLowerCase(); if (q.length < 2){ out.innerHTML = ''; return; }
+      var list = MC.CATALOG.services.filter(function(s){ return s.n.toLowerCase().indexOf(q) >= 0; }).slice(0, 8);
+      out.innerHTML = list.length ? list.map(function(s){ return '<a href="' + BASE + s.h + '"><img class="' + (s.d ? 'on-dark' : '') + '" src="' + s.l + '" alt=""><span>' + esc(s.n) + '</span><span class="c">' + esc(MC.CATALOG.catName[s.c]) + '</span></a>'; }).join('') : '<div class="none">Ничего не нашли — посмотрите <a href="' + BASE + 'catalog.html">каталог</a>.</div>';
+    });
+  }
+  svcSearch($('qSearch'), $('qRes')); svcSearch($('wSearch'), $('wRes'));
+
+  /* ===== Новый заказ ===== */
+  var W = { prod: 'topup', card: 'c1', usd: 50, step: 1 }, newOrder = null;
+  function needKyc(){ return W.usd >= 150 && USER.kyc !== 'full' && USER.kyc !== 'pending'; }
+  function wizShow(n){
+    W.step = n;
+    document.querySelectorAll('#wiz .wiz-pane').forEach(function(p){ p.hidden = +p.getAttribute('data-pane') !== n; });
+    document.querySelectorAll('#wizSteps li').forEach(function(li){ var k = +li.getAttribute('data-step'); li.className = k < n ? 'ok' : k === n ? 'cur' : ''; });
+    if (n === 2) wizStep2(); if (n === 3) wizStep3(); if (n === 4) wizStep4(); if (n === 5) $('wpAmount').textContent = rub(total(W.usd));
+  }
+  function wizStep2(){
+    var s = W.prod === 'svc'; $('wp2svc').hidden = !s; $('wp2card').hidden = s; $('wNext2').hidden = s;
+    $('wpCardPick').hidden = W.prod !== 'topup';
+    var act = CARDS.filter(function(c){ return c.status === 'active'; });
+    $('wCards').innerHTML = act.map(function(c){ return '<button type="button" class="pick" data-c="' + c.id + '" aria-pressed="' + (c.id === W.card) + '">' + ico('card') + '<b>' + c.brand + ' •• ' + c.last4 + '</b><span>' + usdf(c.balance) + '</span></button>'; }).join('');
+    $('wCards').querySelectorAll('.pick').forEach(function(b){ b.addEventListener('click', function(){ W.card = b.getAttribute('data-c'); wizStep2(); }); });
+    var isD = DENOMS.indexOf(W.usd) >= 0;
+    $('wDenoms').innerHTML = DENOMS.map(function(d){ return '<button type="button" aria-pressed="' + (d === W.usd) + '" data-d="' + d + '">$' + d + '</button>'; }).join('');
+    $('wDenoms').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ W.usd = +b.getAttribute('data-d'); $('wCustom').value = ''; wizStep2(); }); });
+    if (!isD) $('wCustom').value = W.usd;
+  }
+  $('wCustom').addEventListener('input', function(){ var v = Math.round(+this.value); if (v >= 50 && v <= 200){ W.usd = v; $('wDenoms').querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', 'false'); }); } });
+  function wizStep3(){
+    var u = W.usd, c = card(W.card);
+    $('wqProd').textContent = W.prod === 'issue' ? 'Новая виртуальная карта' : 'Пополнение ' + (c ? c.brand + ' •• ' + c.last4 : 'карты');
+    $('wqNom').textContent = usdf(u); $('wqFee').textContent = rub(total(u) - u * RATE) + ' (' + Math.round((MC.charged(u) / u - 1) * 100) + '%)'; $('wqRate').textContent = RATE.toFixed(2) + ' ₽/$'; $('wqTot').textContent = rub(total(u));
+    var reqs = [
+      ['ok', 'Оферта 2.3 принята', 'Действующая редакция, акцепт ' + fmtD(DOCS[0].at)],
+      [USER.kyc === 'none' ? 'no' : 'ok', 'Базовая верификация', USER.kyc === 'none' ? 'Подтвердите телефон и почту' : 'Телефон и почта подтверждены'],
+      [needKyc() ? 'todo' : 'ok', 'Расширенная верификация', u >= 150 ? (needKyc() ? 'Нужна для сумм от $150 — паспорт, 3–5 минут' : USER.kyc === 'pending' ? 'На проверке — оплатить можно, зачислим после подтверждения' : 'Пройдена') : 'Не требуется для сумм до $150']
+    ];
+    if (W.prod === 'issue') reqs.push(['ok', 'Лимит карт', 'У вас ' + CARDS.length + ' из 5 возможных']);
+    $('wqReq').innerHTML = reqs.map(function(r){ return '<div class="req ' + r[0] + '">' + ico(r[0] === 'ok' ? 'check' : r[0] === 'todo' ? 'warn' : 'x') + '<div><b>' + r[1] + '</b><span>' + r[2] + '</span></div></div>'; }).join('');
+  }
+  function wizStep4(){
+    var k = needKyc();
+    $('wDocs').innerHTML =
+      '<label class="check"><input type="checkbox" id="wAgree" checked><span class="box"></span><span>Подтверждаю параметры заказа и сумму ' + rub(total(W.usd)) + '<span class="sub">Оферта 2.3 уже принята ' + fmtD(DOCS[0].at) + ' — повторно подписывать не нужно</span></span></label>' +
+      '<label class="check"><input type="checkbox" id="wMail" checked><span class="box"></span><span>Отправить квитанцию на ' + esc(USER.email) + '</span></label>' +
+      (k ? '<div class="alert alert-warn">' + ico('warn') + '<div><b>Нужна расширенная верификация</b>Для сумм от $150 требуется подтверждение личности. Оплатить можно сейчас — заказ подождёт результата проверки, обычно 3–5 минут.<div class="alert-actions"><button type="button" class="auth-link" data-go="kyc">Пройти сейчас</button><button type="button" class="auth-link" id="wLess">Уменьшить до $100</button></div></div></div>' : '');
+    var less = $('wLess'); if (less) less.addEventListener('click', function(){ W.usd = 100; wizShow(3); });
+    $('wAgree').addEventListener('change', function(){ $('wNext4').disabled = !this.checked; }); $('wNext4').disabled = false;
+  }
+  $('wiz').addEventListener('click', function(e){
+    var b = e.target.closest('[data-wiz]'); if (!b) return;
+    var d = b.getAttribute('data-wiz');
+    if (d === 'next'){ if (W.step === 2 && W.prod !== 'svc' && !(W.usd >= 50 && W.usd <= 200)){ toast('Сумма', 'От $50 до $200 за один заказ.', 'err'); return; } wizShow(Math.min(6, W.step + 1)); }
+    else wizShow(Math.max(1, W.step - 1));
+  });
+  document.querySelectorAll('.pick-grid .pick').forEach(function(b){ b.addEventListener('click', function(){ W.prod = b.getAttribute('data-prod'); document.querySelectorAll('.pick-grid .pick').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); }); });
+  function createOrder(paid){
+    var id = 'MC-' + (seq++), pid = 'P-' + (pseq++), c = card(W.card), now = new Date(), k = needKyc();
+    var o = { id: id, kind: W.prod, title: W.prod === 'issue' ? 'Выпуск карты' : 'Пополнение карты', sub: (W.prod === 'issue' ? 'Новая Visa' : c.brand + ' •• ' + c.last4) + ' · ' + usdf(W.usd), usd: W.usd, created: now, pay: pid, card: W.prod === 'issue' ? null : W.card,
+      status: paid ? (k ? 'action' : 'work') : 'new',
+      tl: [['Заказ создан', now, 'ok'], paid ? ['Оплачен через СБП', now, 'ok', 'Платёж ' + pid + ' · ' + rub(total(W.usd))] : ['Оплата', null, 'cur', 'Расчёт действует 15 минут'], k ? ['Верификация', null, paid ? 'warn' : 'todo', 'Подтвердите личность — 3–5 минут'] : [W.prod === 'issue' ? 'Выпуск карты' : 'Зачисление на карту', null, paid ? 'cur' : 'todo', 'Обычно до 15 минут'], [W.prod === 'issue' ? 'Реквизиты доступны' : 'Зачислено', null, 'todo']] };
+    if (k && paid) o.action = { text: 'Для суммы от $150 нужна расширенная верификация', btn: 'Пройти', go: 'kyc' };
+    ORDERS.unshift(o); PAYMENTS.unshift({ id: pid, order: id, method: 'СБП', rubv: total(W.usd), status: paid ? 'ok' : 'pending', at: now });
+    NOTIFS.unshift({ t: (paid ? 'Оплата получена · ' : 'Заказ создан · ') + id, s: o.title + ', ' + usdf(W.usd), at: now, go: 'order:' + id, unread: 1 });
+    newOrder = o; counters(); return o;
+  }
+  $('wPay').addEventListener('click', function(){
+    var b = this; b.classList.add('is-loading');
+    setTimeout(function(){ b.classList.remove('is-loading'); var o = createOrder(true); $('wDoneT').textContent = 'Оплата прошла'; $('wDoneP').innerHTML = 'Заказ <b>' + o.id + '</b> на ' + rub(total(o.usd)) + ' принят. ' + (o.status === 'action' ? 'Осталось пройти верификацию — и зачислим.' : 'Зачислим в течение 15 минут, пришлём уведомление.'); wizShow(6); toast('Платёж проведён', 'Квитанция — в разделе «Платежи».', 'ok'); }, 1400);
+  });
+  $('wPayLater').addEventListener('click', function(){ var o = createOrder(false); $('wDoneT').textContent = 'Заказ создан'; $('wDoneP').innerHTML = 'Заказ <b>' + o.id + '</b> ждёт оплаты — расчёт зафиксирован на 15 минут. Оплатить можно из карточки заказа.'; wizShow(6); });
+  $('wOpen').addEventListener('click', function(){ if (newOrder) go('order', newOrder.id); });
+  R['new'] = function(){ document.querySelectorAll('.pick-grid .pick').forEach(function(x){ x.setAttribute('aria-pressed', x.getAttribute('data-prod') === W.prod); }); wizShow(W.step || 1); };
+
+  /* ===== Мои заказы ===== */
+  var ordF = 'all';
+  var FILT = { all: function(){ return true; }, active: isActive, action: function(o){ return o.status === 'action' || o.status === 'new'; }, done: function(o){ return o.status === 'done'; }, closed: function(o){ return o.status === 'cancel' || o.status === 'refund'; } };
+  R.orders = function(param){
+    if (param && FILT[param]) ordF = param;
+    var q = $('ordSearch').value.trim().toLowerCase();
+    $('ordFilters').querySelectorAll('.cat').forEach(function(b){ var f = b.getAttribute('data-f'); b.setAttribute('aria-selected', f === ordF); b.querySelector('.n').textContent = ORDERS.filter(FILT[f]).length; });
+    var list = ORDERS.filter(FILT[ordF]).filter(function(o){ return !q || (o.id + ' ' + o.title + ' ' + o.sub).toLowerCase().indexOf(q) >= 0; });
+    $('ordList').innerHTML = list.length ? list.map(ordRow).join('') : '<div class="empty"><span class="ico">' + ico('search') + '</span><b>Ничего не нашли</b><p>Попробуйте другой фильтр или номер заказа.</p></div>';
+  };
+  $('ordFilters').addEventListener('click', function(e){ var b = e.target.closest('.cat'); if (!b) return; ordF = b.getAttribute('data-f'); R.orders(); });
+  $('ordSearch').addEventListener('input', function(){ R.orders(); });
+
+  /* карточка заказа */
+  R.order = function(id){
+    var o = order(id); if (!o){ go('orders'); return; }
+    var p = pay(o.pay), c = o.card ? card(o.card) : null;
+    var kv = [['Продукт', esc(o.title) + (o.kind === 'svc' ? ' <a class="auth-link" href="' + svcHref(o.svc) + '">страница сервиса</a>' : '')], ['Параметры', esc(o.sub)]];
+    if (c) kv.push(['Карта', '<button type="button" class="auth-link" data-go="cards">' + c.brand + ' •• ' + c.last4 + '</button>']);
+    kv.push(['Сумма', '<span class="mono">' + usdf(o.usd) + ' → ' + rub(total(o.usd)) + '</span>']);
+    if (p) kv.push(['Платёж', '<button type="button" class="auth-link mono" data-pay="' + p.id + '">' + p.id + '</button> · ' + PST[p.status][0]]);
+    kv.push(['Создан', fmtD(o.created, true)]); if (o.done) kv.push(['Выполнен', fmtD(o.done, true)]);
+    kv.push(['Оферта', 'ред. 2.3 · <button type="button" class="auth-link" data-go="docs">принята</button>']);
+    var actions = '';
+    if (o.status === 'new') actions = '<button type="button" class="btn btn-primary" data-act="pay">Оплатить ' + rub(total(o.usd)) + '</button><button type="button" class="btn btn-ghost" data-act="cancel">Отменить</button>';
+    else if (o.status === 'action') actions = '<button type="button" class="btn btn-primary" data-go="' + o.action.go + '">' + o.action.btn + '</button>';
+    else if (o.status === 'done') actions = '<button type="button" class="btn btn-primary" data-act="repeat">Повторить заказ</button><button type="button" class="btn btn-ghost" data-act="receipt">Квитанция</button><button type="button" class="btn btn-ghost" data-act="act">Акт</button>';
+    actions += '<button type="button" class="btn btn-ghost" data-act="support">' + ico('chat') + 'Написать по заказу</button>';
+    $('orderView').innerHTML = '<div class="ordv">' +
+      '<div class="ordv-head">' + ordIcon(o) + '<div><h1>' + esc(o.title) + '</h1><span class="mono">' + o.id + ' · ' + fmtD(o.created, true) + '</span></div>' + badge(ST[o.status]) + '</div>' +
+      (o.status === 'action' ? '<div class="act">' + ico('warn') + '<div><b>' + esc(o.action.text) + '</b><span>После подтверждения заказ продолжится автоматически</span></div><button type="button" class="btn btn-ghost" data-go="' + o.action.go + '">' + o.action.btn + '</button></div>' : '') +
+      (o.cred ? '<div class="secure"><div class="t"><span>Результат</span><b>' + ico('check') + '</b></div><p style="font-size:14px;color:var(--text-2)">' + esc(o.cred) + '</p></div>' : '') +
+      '<div class="ordv-grid"><div class="card"><h3>Детали</h3><dl class="kv">' + kv.map(function(r){ return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('') + '</dl></div>' +
+      '<div class="card"><h3>История</h3><ol class="vtl">' + o.tl.map(function(s){ return '<li class="' + s[2] + '"><b>' + s[0] + '</b>' + (s[1] ? '<time>' + fmtD(s[1], true) + '</time>' : '') + (s[3] ? '<p>' + s[3] + '</p>' : '') + '</li>'; }).join('') + '</ol></div></div>' +
+      '<div class="ordv-actions">' + actions + '</div></div>';
+    $('orderView').querySelectorAll('[data-act]').forEach(function(b){ b.addEventListener('click', function(){ orderAct(o, b.getAttribute('data-act'), b); }); });
+    $('orderView').querySelectorAll('[data-pay]').forEach(function(b){ b.addEventListener('click', function(){ receipt(pay(b.getAttribute('data-pay'))); }); });
+  };
+  function orderAct(o, a, btn){
+    if (a === 'pay'){ btn.classList.add('is-loading'); setTimeout(function(){ o.status = 'work'; o.tl[1] = ['Оплачен через СБП', new Date(), 'ok', 'Платёж ' + o.pay + ' · ' + rub(total(o.usd))]; o.tl[2][2] = 'cur'; var p = pay(o.pay); if (p){ p.status = 'ok'; p.at = new Date(); } toast('Оплачено', o.id + ' в работе.', 'ok'); counters(); R.order(o.id); }, 1200); }
+    else if (a === 'cancel') modal({ title: 'Отменить заказ ' + o.id + '?', sub: 'Заказ ещё не оплачен — отмена бесплатна.', foot: [{ label: 'Оставить' }, { label: 'Отменить заказ', cls: 'btn-primary', onClick: function(){ o.status = 'cancel'; o.tl = [o.tl[0], ['Отменён до оплаты', new Date(), 'err', 'Отменили вы']]; var p = pay(o.pay); if (p) p.status = 'failed'; counters(); R.order(o.id); toast('Заказ отменён', '', 'ok'); } }] });
+    else if (a === 'repeat'){ if (o.kind === 'svc') location.href = svcHref(o.svc); else { W = { prod: o.kind === 'issue' ? 'issue' : 'topup', card: o.card || 'c1', usd: o.usd, step: 3 }; go('new'); } }
+    else if (a === 'receipt') receipt(pay(o.pay));
+    else if (a === 'act') toast('Акт № ' + o.id.replace('MC-', 'А-'), 'Прототип: PDF сформируется на сервере и скачается.', 'ok');
+    else if (a === 'support') go('support', 'new', { order: o.id });
+  }
+  function receipt(p){
+    if (!p) return; var o = order(p.order);
+    modal({ title: 'Квитанция ' + p.id, sub: PST[p.status][0] + ' · ' + fmtD(p.at, true), body: '<dl class="kv"><div><dt>Получатель</dt><dd>Marscap</dd></div><div><dt>Назначение</dt><dd>' + esc(o ? o.title + ' · ' + o.id : p.order) + '</dd></div><div><dt>Способ</dt><dd>' + p.method + '</dd></div><div><dt>Сумма</dt><dd class="mono">' + rub(p.rubv) + '</dd></div><div><dt>Идентификатор СБП</dt><dd class="mono">A' + String(Math.abs(hash(p.id))).slice(0, 12) + '</dd></div></dl>', foot: [{ label: 'Закрыть' }, { label: 'Скачать PDF', cls: 'btn-primary', onClick: function(){ toast('Квитанция ' + p.id, 'Прототип: PDF скачается с сервера.', 'ok'); } }] });
+  }
+  function hash(s){ var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h * 7919; }
+
+  /* ===== Мои карты ===== */
+  function cbHtml(c, mini){
+    if (mini) return '<div class="cb ' + c.status + '"><div class="cb-top"><span class="cb-chip"></span></div><div class="cb-num">•• ' + c.last4 + '</div><div class="cb-bot"><b>' + c.exp + '</b><span class="cb-brand">' + c.brand + '</span></div></div>';
+    return '<div class="cb ' + c.status + '"><div class="cb-top"><span class="cb-chip"></span><span>VIRTUAL</span></div><div class="cb-num">•••• •••• •••• ' + c.last4 + '</div><div class="cb-bot"><div><span class="l">Баланс</span><b>' + usdf(c.balance) + '</b></div><div><span class="l">до</span><b>' + c.exp + '</b></div><span class="cb-brand">' + c.brand + '</span></div></div>';
+  }
+  var revealed = {}, revealT = {};
+  R.cards = function(){
+    counters();
+    $('cardsGrid').innerHTML = CARDS.map(function(c){
+      var linked = ORDERS.filter(function(o){ return o.card === c.id; }), r = revealed[c.id];
+      return '<div class="cardp" data-c="' + c.id + '">' + cbHtml(c) +
+        '<div class="cardp-meta"><span>Выпущена ' + fmtD(c.issued) + '</span>' + badge(c.status === 'active' ? ['Активна', 'badge-ok'] : ['Заморожена', 'badge-plain']) + '</div>' +
+        (r ? '<div class="secure"><div class="t"><span>Реквизиты видны</span><b><span data-sec="' + c.id + '">60</span> с</b></div><div class="cred"><span class="k">Номер</span><span class="v">' + c.pan + '</span><button type="button" class="icon-btn plain" data-copy="' + c.pan.replace(/ /g, '') + '" aria-label="Копировать">' + ico('copy') + '</button></div><div class="cred"><span class="k">Срок</span><span class="v">' + c.exp + '</span><button type="button" class="icon-btn plain" data-copy="' + c.exp + '" aria-label="Копировать">' + ico('copy') + '</button></div><div class="cred"><span class="k">CVV</span><span class="v">' + c.cvv + '</span><button type="button" class="icon-btn plain" data-copy="' + c.cvv + '" aria-label="Копировать">' + ico('copy') + '</button></div><div class="cred"><span class="k">Имя</span><span class="v">MARSCAP CARDHOLDER</span><button type="button" class="icon-btn plain" data-copy="MARSCAP CARDHOLDER" aria-label="Копировать">' + ico('copy') + '</button></div></div>' : '') +
+        '<div class="cardp-btns">' + (r ? '<button type="button" class="btn btn-ghost wide" data-ca="hide">' + ico('lock') + 'Скрыть реквизиты</button>' : '<button type="button" class="btn btn-primary wide" data-ca="reveal" ' + (c.status !== 'active' ? 'disabled' : '') + '>' + ico('eye') + 'Показать реквизиты</button>') +
+        '<button type="button" class="btn btn-ghost" data-ca="topup" ' + (c.status !== 'active' ? 'disabled' : '') + '>' + ico('plus') + 'Пополнить</button><button type="button" class="btn btn-ghost" data-ca="freeze">' + ico('snow') + (c.status === 'active' ? 'Заморозить' : 'Разморозить') + '</button></div>' +
+        '<div class="cardp-links">Заказы: ' + (linked.length ? linked.map(function(o){ return '<button type="button" class="auth-link mono" data-go="order:' + o.id + '">' + o.id + '</button>'; }).join('') : '—') + '</div></div>';
+    }).join('') + '<button type="button" class="cardp issue" data-go="new" data-prod="issue">' + ico('plus') + '<b>Выпустить ещё одну</b><p>Отдельная карта под сервис или покупку — удобно для лимитов.</p></button>';
+    $('cardsGrid').querySelectorAll('[data-ca]').forEach(function(b){ b.addEventListener('click', function(){ cardAct(card(b.closest('.cardp').getAttribute('data-c')), b.getAttribute('data-ca')); }); });
+    $('cardsGrid').querySelectorAll('[data-copy]').forEach(function(b){ b.addEventListener('click', function(){ var v = b.getAttribute('data-copy'); (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ toast('Скопировано', '', 'ok'); }, function(){ toast('Скопируйте вручную', v); }); }); });
+  };
+  function cardAct(c, a){
+    if (a === 'reveal') stepUp('Показать реквизиты •• ' + c.last4, null, function(){ revealed[c.id] = 60; R.cards(); clearInterval(revealT[c.id]); revealT[c.id] = setInterval(function(){ revealed[c.id]--; var el = document.querySelector('[data-sec="' + c.id + '"]'); if (el) el.textContent = revealed[c.id]; if (revealed[c.id] <= 0){ clearInterval(revealT[c.id]); delete revealed[c.id]; if (cur === 'cards') R.cards(); } }, 1000); });
+    else if (a === 'hide'){ clearInterval(revealT[c.id]); delete revealed[c.id]; R.cards(); }
+    else if (a === 'topup'){ W = { prod: 'topup', card: c.id, usd: 50, step: 2 }; go('new'); }
+    else if (a === 'freeze'){ if (c.status === 'active') modal({ title: 'Заморозить карту •• ' + c.last4 + '?', sub: 'Списания будут отклоняться, баланс сохранится. Разморозить можно в любой момент.', foot: [{ label: 'Отмена' }, { label: 'Заморозить', cls: 'btn-primary', onClick: function(){ c.status = 'frozen'; delete revealed[c.id]; R.cards(); toast('Карта заморожена', '', 'ok'); } }] }); else stepUp('Разморозить карту •• ' + c.last4, null, function(){ c.status = 'active'; R.cards(); toast('Карта активна', '', 'ok'); }); }
+  }
+
+  /* ===== Платежи и возвраты ===== */
+  R.payments = function(param){
+    var tb = $('payTable').querySelector('tbody');
+    tb.innerHTML = PAYMENTS.map(function(p){ var o = order(p.order); return '<tr><td class="mono">' + fmtD(p.at, true) + '</td><td><b>' + (o ? esc(o.title) : '') + '</b><br><button type="button" class="act-link mono" data-go="order:' + p.order + '">' + p.order + '</button></td><td>' + p.method + '</td><td class="num">' + rub(p.rubv) + '</td><td class="st">' + badge(PST[p.status]) + '</td><td>' + (p.status === 'ok' || p.status === 'refunded' ? '<button type="button" class="act-link" data-rc="' + p.id + '">' + ico('doc') + 'Квитанция</button>' : '') + '</td></tr>'; }).join('');
+    tb.querySelectorAll('[data-rc]').forEach(function(b){ b.addEventListener('click', function(){ receipt(pay(b.getAttribute('data-rc'))); }); });
+    $('refN').textContent = REFUNDS.length;
+    $('refList').innerHTML = REFUNDS.length ? REFUNDS.map(function(r){ return '<div class="refc"><b>' + r.id + ' · ' + esc(r.why) + '</b><span class="sum">' + rub(r.rubv) + '</span><span>Платёж ' + r.pay + ' · заказ ' + r.order + ' · ' + fmtD(r.at) + (r.doneAt ? ' → возвращён ' + fmtD(r.doneAt) : '') + '</span>' + badge(r.status === 'done' ? ['Выполнен', 'badge-ok'] : ['На рассмотрении', 'badge-warn']) + '</div>'; }).join('') : '<div class="empty"><b>Запросов нет</b></div>';
+    var sel = $('refPay'), opts = PAYMENTS.filter(function(p){ return p.status === 'ok'; });
+    sel.innerHTML = opts.map(function(p){ var o = order(p.order); return '<option value="' + p.id + '">' + p.id + ' · ' + (o ? o.title : '') + ' · ' + rub(p.rubv) + '</option>'; }).join('');
+    payTab(param === 'refunds' ? 'refunds' : 'pays');
+  };
+  function payTab(t){ $('payTabs').querySelectorAll('[role="tab"]').forEach(function(x){ x.setAttribute('aria-selected', x.getAttribute('data-pt') === t); }); $('payPane').hidden = t !== 'pays'; $('refPane').hidden = t !== 'refunds'; }
+  $('payTabs').addEventListener('click', function(e){ var t = e.target.closest('[role="tab"]'); if (t) payTab(t.getAttribute('data-pt')); });
+  $('refForm').addEventListener('submit', function(e){
+    e.preventDefault(); var p = pay($('refPay').value); if (!p) return;
+    REFUNDS.unshift({ id: 'R-' + (rseq++), pay: p.id, order: p.order, why: $('refWhy').value, rubv: p.rubv, status: 'review', at: new Date() });
+    $('refTxt').value = ''; R.payments('refunds'); toast('Запрос отправлен', 'Ответим в течение 3 рабочих дней.', 'ok');
+  });
+
+  /* ===== Верификация ===== */
+  var kycFiles = [];
+  R.kyc = function(){
+    counters();
+    var k = USER.kyc, map = { none: ['Не пройдена', 'badge-err', 10, 'Подтвердите телефон и почту, чтобы оформлять заказы.'], basic: ['Базовая', 'badge-info', 45, 'Телефон и почта подтверждены. Для сумм от $150 и третьей карты нужна расширенная проверка.'], pending: ['На проверке', 'badge-warn', 75, 'Документы у провайдера. Обычно 3–5 минут, максимум — 1 рабочий день. Заказы можно оплачивать, зачислим после подтверждения.'], full: ['Расширенная', 'badge-ok', 100, 'Все лимиты открыты. Повторная проверка не потребуется.'], more: ['Нужны данные', 'badge-warn', 60, 'Провайдер запросил дополнительный документ.'] }[k];
+    $('kycStatus').innerHTML = '<div class="row"><h3>Статус: ' + map[0] + '</h3>' + badge([map[0], map[1]]) + '</div><p>' + map[3] + '</p><div class="progress"><i style="--v:' + map[2] + '%"></i></div>' +
+      (k === 'more' ? '<div class="alert alert-warn">' + ico('warn') + '<div><b>Нужен документ, подтверждающий адрес</b>Выписка из банка или квитанция ЖКУ не старше 3 месяцев.<div class="alert-actions"><button type="button" class="auth-link" id="kycMore">Загрузить</button></div></div></div>' : '') +
+      (k === 'pending' ? '<button type="button" class="btn btn-ghost" id="kycFake">' + ico('refresh') + 'Обновить статус</button>' : '');
+    var lv = [
+      { t: 'Базовая', s: 'Телефон и почта · заказы до $150', st: k === 'none' ? 'cur' : 'ok' },
+      { t: 'Расширенная', s: 'Паспорт и селфи · любые суммы, до 5 карт', st: k === 'full' ? 'ok' : (k === 'pending' || k === 'more') ? 'cur' : '' },
+      { t: 'Для бизнеса', s: 'Реквизиты компании, закрывающие документы', st: '', soon: 1 }
+    ];
+    $('kycLevels').innerHTML = lv.map(function(l){ return '<div class="lvl ' + l.st + '">' + ico(l.st === 'ok' ? 'check' : 'shield') + '<b>' + l.t + '</b><span>' + l.s + '</span>' + badge(l.soon ? ['Следующий релиз', 'badge-plain'] : l.st === 'ok' ? ['Пройден', 'badge-ok'] : l.st === 'cur' ? [k === 'pending' ? 'На проверке' : 'Доступен', 'badge-info'] : ['Доступен', 'badge-plain']) + '</div>'; }).join('');
+    $('kycFiles').innerHTML = kycFiles.map(function(f){ return '<li>' + ico('doc') + esc(f.n) + '<span class="mono">' + f.s + '</span></li>'; }).join('');
+    var ff = $('kycFake'); if (ff) ff.addEventListener('click', function(){ ff.classList.add('is-loading'); setTimeout(function(){ USER.kyc = 'full'; ORDERS.forEach(function(o){ if (o.status === 'action' && o.action && o.action.go === 'kyc'){ o.status = 'work'; o.tl.forEach(function(s){ if (s[2] === 'warn'){ s[1] = new Date(); s[2] = 'ok'; s[3] = 'Подтверждено'; } }); o.tl[o.tl.length - 1][2] = 'cur'; delete o.action; } }); NOTIFS.unshift({ t: 'Верификация пройдена', s: 'Лимиты открыты, заказы продолжены', at: new Date(), go: 'orders', unread: 1 }); R.kyc(); toast('Верификация пройдена', 'Заказы, ждавшие проверки, продолжены.', 'ok'); }, 1500); });
+    var km = $('kycMore'); if (km) km.addEventListener('click', function(){ $('kycFile').click(); });
+    $('kycStart').disabled = k === 'pending' || k === 'full';
+  };
+  $('kycStart').addEventListener('click', function(){
+    modal({ title: 'Переход к проверке', sub: 'Откроется страница партнёра по верификации. Понадобятся паспорт и камера.', body: '<ul class="check-marks"><li>Данные не сохраняются у Marscap</li><li>Обычно 3–5 минут</li><li>Результат появится в кабинете автоматически</li></ul>', foot: [{ label: 'Позже' }, { label: 'Продолжить', cls: 'btn-primary', onClick: function(){ USER.kyc = 'pending'; R.kyc(); toast('Проверка запущена', 'Прототип: нажмите «Обновить статус», чтобы увидеть результат.'); } }] });
+  });
+  function addFiles(list){ [].forEach.call(list, function(f){ kycFiles.push({ n: f.name, s: (f.size / 1024 / 1024).toFixed(1) + ' МБ' }); }); if (kycFiles.length){ if (USER.kyc === 'basic' || USER.kyc === 'more') USER.kyc = 'pending'; R.kyc(); toast('Файлы отправлены на проверку', kycFiles.length + ' ' + MC.plural(kycFiles.length, ['файл', 'файла', 'файлов']), 'ok'); } }
+  $('kycFile').addEventListener('change', function(){ addFiles(this.files); this.value = ''; });
+  var drop = $('kycDrop'); ['dragenter', 'dragover'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('over'); }); }); ['dragleave', 'drop'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove('over'); if (ev === 'drop') addFiles(e.dataTransfer.files); }); });
+
+  /* ===== Профиль и безопасность ===== */
+  R.profile = function(param){
+    counters();
+    $('contactList').innerHTML = '<div><span class="k">Телефон</span><span class="v mono">' + esc(USER.phone) + ' <button type="button" class="auth-link" data-ch="phone">Изменить</button></span></div><div><span class="k">Почта</span><span class="v mono">' + esc(USER.email) + ' <button type="button" class="auth-link" data-ch="email">Изменить</button></span></div><div><span class="k">Telegram</span><span class="v">' + (USER.tg ? '@' + USER.tg + ' <button type="button" class="auth-link" data-ch="tgoff">Отвязать</button>' : 'не привязан <button type="button" class="auth-link" data-ch="tg">Привязать</button>') + '</span></div><div><span class="k">В Marscap с</span><span class="v">' + new Date(USER.since).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }) + '</span></div>';
+    $('contactList').querySelectorAll('[data-ch]').forEach(function(b){ b.addEventListener('click', function(){ changeContact(b.getAttribute('data-ch')); }); });
+    $('pName').value = USER.name;
+    $('mfaTgl').checked = USER.mfa; $('mfaSub').textContent = USER.mfa ? 'включена' : 'выключена'; $('mfaSetup').hidden = true;
+    $('sesN').textContent = SESSIONS.length;
+    $('sesList').innerHTML = SESSIONS.map(function(s){ return '<div class="ses ' + (s.sus ? 'sus' : '') + '">' + ico(s.icon) + '<b>' + s.dev + (s.cur ? badge(['Это устройство', 'badge-ok']) : '') + (s.sus ? badge(['Подозрительный', 'badge-err']) : '') + '</b><span>' + s.place + ' · ' + s.ip + ' · ' + s.at + '</span>' + (s.cur ? '' : '<button type="button" class="btn btn-ghost" data-kill="' + s.id + '">Завершить</button>') + '</div>'; }).join('');
+    $('sesList').querySelectorAll('[data-kill]').forEach(function(b){ b.addEventListener('click', function(){ var id = b.getAttribute('data-kill'); SESSIONS = SESSIONS.filter(function(s){ return s.id !== id; }); R.profile('sessions'); toast('Сессия завершена', 'Если это были не вы — смените пароль.', 'ok'); }); });
+    $('consentList').innerHTML = DOCS.map(function(d){ return '<div><span class="k">' + esc(d.name) + '</span><span class="v">ред. ' + d.ver + ' · ' + fmtD(d.at) + '</span></div>'; }).join('');
+    profTab(param || 'contacts');
+  };
+  function profTab(t){ $('profTabs').querySelectorAll('[role="tab"]').forEach(function(x){ x.setAttribute('aria-selected', x.getAttribute('data-pp') === t); }); document.querySelectorAll('.prof-pane').forEach(function(p){ p.hidden = p.getAttribute('data-pp') !== t; }); }
+  $('profTabs').addEventListener('click', function(e){ var t = e.target.closest('[role="tab"]'); if (t) profTab(t.getAttribute('data-pp')); });
+  function changeContact(what){
+    if (what === 'tg'){ modal({ title: 'Привязать Telegram', sub: 'Откройте бота и отправьте код — он свяжет аккаунт.', body: '<div class="cred"><span class="k">Бот</span><span class="v">@marscap_bot</span></div><div class="cred"><span class="k">Код</span><span class="v">' + String(Math.abs(hash(USER.id))).slice(0, 6) + '</span></div>', foot: [{ label: 'Отмена' }, { label: 'Я отправил код', cls: 'btn-primary', onClick: function(){ USER.tg = 'fridrix_19'; R.profile(); toast('Telegram привязан', 'Статусы заказов будут приходить в бот.', 'ok'); } }] }); return; }
+    if (what === 'tgoff'){ delete USER.tg; R.profile(); toast('Telegram отвязан', '', 'ok'); return; }
+    var isP = what === 'phone';
+    modal({ title: isP ? 'Новый телефон' : 'Новая почта', sub: 'Подтвердим кодом на старый контакт, затем на новый.', body: '<div class="field"><label for="ncVal">' + (isP ? 'Телефон' : 'Почта') + '</label><input id="ncVal" type="text" inputmode="' + (isP ? 'tel' : 'email') + '" placeholder="' + (isP ? '+7 900 000-00-00' : 'mail@example.ru') + '"></div>', foot: [{ label: 'Отмена' }, { label: 'Продолжить', cls: 'btn-primary', onClick: function(){ var v = $('ncVal').value.trim(); if (v.length < 5){ $('ncVal').focus(); return false; } setTimeout(function(){ stepUp('Подтвердите смену', 'Код отправили на текущий ' + (isP ? 'телефон' : 'адрес') + ' ' + (isP ? USER.phone : USER.email) + '.', function(){ if (isP) USER.phone = v; else USER.email = v.replace(/^(.).*(.@.*)$/, '$1•••••$2'); SESSIONS = SESSIONS.filter(function(s){ return s.cur; }); R.profile(); toast('Контакт обновлён', 'Остальные сессии завершены для безопасности.', 'ok'); }); }, 50); } }] });
+  }
+  $('pSave').addEventListener('click', function(){ var v = $('pName').value.trim(); if (!v){ $('pName').focus(); return; } USER.name = v; counters(); toast('Сохранено', '', 'ok'); });
+  $('pwNew').addEventListener('input', function(){ var v = this.value, s = 0; if (v.length >= 8) s++; if (/[A-ZА-Я]/.test(v) && /[a-zа-я]/.test(v)) s++; if (/\d/.test(v)) s++; if (/[^\w\dа-яА-Я]/.test(v) || v.length >= 14) s++; $('pwMeter').setAttribute('data-score', v ? s : 0); });
+  $('pwForm').addEventListener('submit', function(e){ e.preventDefault(); if (!$('pwOld').value){ $('pwOld').focus(); toast('Введите текущий пароль', '', 'err'); return; } if ($('pwNew').value.length < 8){ $('pwNew').focus(); toast('Пароль короткий', 'Минимум 8 символов.', 'err'); return; } var f = this; stepUp('Подтвердите смену пароля', null, function(){ f.reset(); $('pwMeter').removeAttribute('data-score'); SESSIONS = SESSIONS.filter(function(s){ return s.cur; }); toast('Пароль изменён', 'Остальные устройства разлогинены.', 'ok'); }); });
+  $('mfaTgl').addEventListener('change', function(){
+    var t = this;
+    if (t.checked){ $('mfaSetup').hidden = false; $('mfaSub').textContent = 'настройка…'; wireOtp($('mfaBoxes'), function(code, box, ins){ USER.mfa = true; box.classList.add('is-ok'); setTimeout(function(){ $('mfaSetup').hidden = true; $('mfaSub').textContent = 'включена'; ins.forEach(function(x){ x.value = ''; x.classList.remove('is-filled'); }); box.classList.remove('is-ok'); toast('2FA включена', 'Сохраните резервные коды.', 'ok'); }, 400); }); }
+    else if (USER.mfa){ t.checked = true; modal({ title: 'Выключить 2FA?', sub: 'Вход и показ реквизитов станут защищены только паролем и кодом из SMS.', foot: [{ label: 'Оставить' }, { label: 'Выключить', cls: 'btn-primary', onClick: function(){ USER.mfa = false; t.checked = false; $('mfaSub').textContent = 'выключена'; toast('2FA выключена', '', 'ok'); } }] }); }
+    else { $('mfaSetup').hidden = true; $('mfaSub').textContent = 'выключена'; }
+  });
+  $('backupCodes').addEventListener('click', function(){ stepUp('Резервные коды', null, function(){ var c = []; for (var i = 0; i < 8; i++) c.push(String(Math.abs(hash(USER.id + i))).slice(0, 8).replace(/(\d{4})/, '$1-')); modal({ title: 'Резервные коды', sub: 'Каждый работает один раз. Храните не в почте.', body: '<div class="codes">' + c.map(function(x){ return '<span>' + x + '</span>'; }).join('') + '</div>', foot: [{ label: 'Закрыть' }, { label: 'Скопировать', cls: 'btn-primary', keep: true, onClick: function(){ (navigator.clipboard ? navigator.clipboard.writeText(c.join('\n')) : Promise.reject()).then(function(){ toast('Скопировано', '', 'ok'); }, function(){ toast('Скопируйте вручную'); }); } }] }); }); });
+  $('killAll').addEventListener('click', function(){ if (SESSIONS.length < 2){ toast('Других сессий нет'); return; } stepUp('Завершить все сессии', null, function(){ SESSIONS = SESSIONS.filter(function(s){ return s.cur; }); R.profile('sessions'); toast('Готово', 'Остались только вы.', 'ok'); }); });
+
+  /* ===== Поддержка ===== */
+  var tkCur = null;
+  var TST = { open: ['Открыто', 'badge-info'], answered: ['Есть ответ', 'badge-ok'], closed: ['Закрыто', 'badge-plain'] };
+  R.support = function(param, opts){
+    counters();
+    if (param === 'new'){ tkCur = null; tkNew(opts && opts.order); }
+    else { if (param) tkCur = param; if (!tkCur && TICKETS.length) tkCur = TICKETS[0].id; tkOpen(tkCur); }
+    tkListRender();
+  };
+  function tkListRender(){
+    $('tkList').innerHTML = TICKETS.length ? TICKETS.map(function(t){ return '<button type="button" class="tk ' + (t.id === tkCur ? 'is-active' : '') + '" data-t="' + t.id + '"><b>' + esc(t.subj) + '</b><span>' + t.id + (t.order ? ' · заказ ' + t.order : '') + ' · ' + fmtD(t.msgs[t.msgs.length - 1].at, true) + '</span>' + badge(TST[t.status]) + '</button>'; }).join('') : '<div class="empty"><b>Обращений нет</b></div>';
+    $('tkList').querySelectorAll('.tk').forEach(function(b){ b.addEventListener('click', function(){ tkCur = b.getAttribute('data-t'); tkOpen(tkCur); tkListRender(); history.replaceState(null, '', '#support:' + tkCur); }); });
+  }
+  function tkOpen(id){
+    var t = TICKETS.filter(function(x){ return x.id === id; })[0];
+    if (!t){ $('tkView').innerHTML = '<div class="empty tk-empty"><span class="ico">' + ico('chat') + '</span><b>Выберите обращение</b><p>Или создайте новое — оператор увидит заказ и платёж без пересылки данных.</p></div>'; return; }
+    var o = t.order ? order(t.order) : null;
+    $('tkView').innerHTML = '<div class="tk-head"><div><h3>' + esc(t.subj) + '</h3><div class="meta"><span class="mono">' + t.id + '</span>' + (o ? '<button type="button" class="auth-link" data-go="order:' + o.id + '">' + esc(o.title) + ' · ' + o.id + '</button>' : '') + '<span>' + fmtD(t.at, true) + '</span></div></div>' + badge(TST[t.status]) + '</div>' +
+      '<div class="msgs">' + t.msgs.map(function(m){ return m.sys ? '<div class="msg sys">' + esc(m.t) + '</div>' : '<div class="msg ' + (m.me ? 'me' : '') + '">' + esc(m.t) + (m.att ? '<span class="att">' + ico('clip') + esc(m.att) + '</span>' : '') + '<time>' + (m.me ? 'Вы' : 'Оператор') + ' · ' + fmtD(m.at, true) + '</time></div>'; }).join('') + '</div>' +
+      (t.status === 'closed' ? '<div class="reply"><p class="hint" style="flex:1">Обращение закрыто. <button type="button" class="auth-link" id="tkReopen">Открыть снова</button></p></div>' : '<form class="reply" id="tkReply"><div class="field"><textarea id="tkText" rows="1" placeholder="Написать оператору…"></textarea></div><button type="button" class="icon-btn" id="tkAttach" aria-label="Прикрепить файл">' + ico('clip') + '</button><button type="submit" class="icon-btn" aria-label="Отправить" style="color:var(--accent)">' + ico('send') + '</button></form>');
+    var rp = $('tkReply'); if (rp){ rp.addEventListener('submit', function(e){ e.preventDefault(); var v = $('tkText').value.trim(); if (!v) return; t.msgs.push({ me: 1, t: v, at: new Date() }); t.status = 'open'; tkOpen(t.id); tkListRender(); setTimeout(function(){ t.msgs.push({ me: 0, t: 'Спасибо, передали оператору — ответим в этом обращении. Обычно до 15 минут в рабочее время (9:00–22:00 МСК).', at: new Date() }); t.status = 'answered'; if (tkCur === t.id) tkOpen(t.id); tkListRender(); counters(); }, 1800); }); $('tkAttach').addEventListener('click', function(){ t.msgs.push({ me: 1, t: 'Скриншот экрана', att: 'screenshot.png · 0,4 МБ', at: new Date() }); tkOpen(t.id); }); $('tkText').addEventListener('keydown', function(e){ if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); rp.requestSubmit ? rp.requestSubmit() : rp.dispatchEvent(new Event('submit')); } }); }
+    var ro = $('tkReopen'); if (ro) ro.addEventListener('click', function(){ t.status = 'open'; t.msgs.push({ sys: 1, t: 'Обращение открыто снова', at: new Date() }); tkOpen(t.id); tkListRender(); counters(); });
+    var ms = $('tkView').querySelector('.msgs'); if (ms) ms.scrollTop = ms.scrollHeight;
+  }
+  function tkNew(orderId){
+    var opts = ORDERS.map(function(o){ return '<option value="' + o.id + '" ' + (o.id === orderId ? 'selected' : '') + '>' + o.id + ' · ' + esc(o.title) + '</option>'; }).join('');
+    $('tkView').innerHTML = '<form class="tk-new" id="tkForm" novalidate><div class="tk-head"><div><h3>Новое обращение</h3><div class="meta"><span>Оператор увидит заказ, платёж и статус карты — данные пересылать не нужно</span></div></div></div>' +
+      '<div class="form-row"><div class="field"><label for="tkTopic">Тема</label><select id="tkTopic"><option>Не пришли реквизиты или доступ</option><option>Оплата прошла, заказ не создан</option><option>Списание с карты отклонено</option><option>Возврат</option><option>Верификация</option><option>Другое</option></select></div><div class="field"><label for="tkOrder">Заказ</label><select id="tkOrder"><option value="">Без привязки</option>' + opts + '</select></div></div>' +
+      '<div class="field"><label for="tkMsg">Сообщение</label><textarea id="tkMsg" rows="4" placeholder="Что случилось и что вы ожидали"></textarea></div>' +
+      '<div class="file-list" id="tkFiles"></div><div class="wiz-foot"><button type="button" class="btn btn-ghost" id="tkAdd">' + ico('clip') + 'Прикрепить</button><button type="submit" class="btn btn-primary">Отправить</button></div></form>';
+    var files = [];
+    $('tkAdd').addEventListener('click', function(){ files.push('screenshot-' + (files.length + 1) + '.png'); $('tkFiles').innerHTML = files.map(function(f){ return '<li>' + ico('doc') + f + '</li>'; }).join(''); });
+    $('tkForm').addEventListener('submit', function(e){
+      e.preventDefault(); var v = $('tkMsg').value.trim(); if (!v){ $('tkMsg').focus(); toast('Опишите проблему', '', 'err'); return; }
+      var t = { id: 'T-' + (tseq++), subj: $('tkTopic').value, order: $('tkOrder').value || null, status: 'open', at: new Date(), msgs: [{ me: 1, t: v, at: new Date(), att: files.length ? files.join(', ') : null }] };
+      TICKETS.unshift(t); tkCur = t.id; tkOpen(t.id); tkListRender(); counters(); toast('Обращение создано', t.id + ' — ответим здесь и на почту.', 'ok');
+      setTimeout(function(){ t.msgs.push({ me: 0, t: 'Здравствуйте! Приняли обращение' + (t.order ? ' по заказу ' + t.order : '') + '. Смотрим — ответим в течение 15 минут.', at: new Date() }); t.status = 'answered'; if (tkCur === t.id) tkOpen(t.id); tkListRender(); counters(); }, 2500);
+    });
+    $('tkMsg').focus();
+  }
+  $('newTicket').addEventListener('click', function(){ tkCur = null; tkNew(); tkListRender(); history.replaceState(null, '', '#support:new'); });
+
+  /* ===== Документы ===== */
+  R.docs = function(){
+    $('docAccepted').innerHTML = DOCS.map(function(d, i){ return '<div class="docr">' + ico('doc') + '<b>' + esc(d.name) + '<span class="ver">v' + d.ver + '</span>' + badge(['Принята', 'badge-ok']) + '</b><span>Акцепт ' + fmtD(d.at, true) + ' · ' + esc(USER.id) + (d.hist.length ? ' · <button type="button" class="auth-link" data-h="' + i + '">история</button>' : '') + '</span><div class="r">' + (d.href ? '<a class="icon-btn" href="' + d.href + '" target="_blank" rel="noopener" aria-label="Открыть">' + ico('dl') + '</a>' : '') + '</div><div class="hist" hidden id="dh' + i + '">' + d.hist.map(function(h){ return '<div>' + h + '</div>'; }).join('') + '</div></div>'; }).join('');
+    $('docAccepted').querySelectorAll('[data-h]').forEach(function(b){ b.addEventListener('click', function(){ var el = $('dh' + b.getAttribute('data-h')); el.hidden = !el.hidden; }); });
+    var files = [];
+    PAYMENTS.forEach(function(p){ if (p.status === 'ok' || p.status === 'refunded'){ var o = order(p.order); files.push({ t: 'Квитанция ' + p.id, s: (o ? o.title + ' · ' : '') + rub(p.rubv) + ' · ' + fmtD(p.at), pay: p.id, at: p.at }); } });
+    ORDERS.forEach(function(o){ if (o.status === 'done') files.push({ t: 'Акт ' + o.id.replace('MC-', 'А-'), s: o.title + ' · ' + fmtD(o.done), act: o.id, at: o.done }); });
+    files.sort(function(a, b){ return new Date(b.at) - new Date(a.at); });
+    $('docFiles').innerHTML = files.map(function(f){ return '<div class="docr">' + ico(f.act ? 'orders' : 'pay') + '<b>' + f.t + '</b><span>' + esc(f.s) + '</span><div class="r"><button type="button" class="icon-btn" ' + (f.pay ? 'data-rc="' + f.pay + '"' : 'data-actd="' + f.act + '"') + ' aria-label="Открыть">' + ico(f.pay ? 'eye' : 'dl') + '</button></div></div>'; }).join('');
+    $('docFiles').querySelectorAll('[data-rc]').forEach(function(b){ b.addEventListener('click', function(){ receipt(pay(b.getAttribute('data-rc'))); }); });
+    $('docFiles').querySelectorAll('[data-actd]').forEach(function(b){ b.addEventListener('click', function(){ toast('Акт по заказу ' + b.getAttribute('data-actd'), 'Прототип: PDF скачается с сервера.', 'ok'); }); });
+  };
+
+  /* ——— выход ——— */
+  function logout(e){ if (e) e.preventDefault(); try { localStorage.removeItem('mc-session'); } catch (x) {} location.href = BASE + 'login.html'; }
+  $('logout').addEventListener('click', logout); $('logoutM').addEventListener('click', logout);
+
+  /* ——— шапка сайта: «Войти» → имя ——— */
+  var hl = document.querySelector('.head-login'); if (hl){ hl.href = '#profile'; hl.lastChild.textContent = USER.name; hl.setAttribute('data-go', 'profile'); }
+
+  counters();
+  route();
+  MC.initReveal();
+})();

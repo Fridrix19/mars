@@ -1,0 +1,92 @@
+<header class="ds-top">
+  <div class="ds-top-in">
+    <button type="button" class="ds-menu-btn" id="dsMenu" aria-label="Открыть оглавление" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="ds-brand" href="#top"><span class="brand-mark" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 12V4l5 4.6L13 4v8" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></span>Marscap <em>· Дизайн-система</em></a>
+    <span class="ds-ver">v1.0 · 15.09.2026</span>
+    <span class="sp"></span>
+    <div class="ds-preview"><span>Превью компонентов</span>
+      <div class="seg" role="group" aria-label="Тема превью">
+        <button type="button" data-preview="light" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>Светлая</button>
+        <button type="button" data-preview="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></svg>Тёмная</button>
+      </div>
+    </div>
+    <a class="ds-top-link" href="#primevue">PrimeVue</a>
+  </div>
+</header>
+
+<div class="ds-shell" id="top">
+  <aside class="ds-side" id="dsSide">
+    <nav class="ds-nav" aria-label="Оглавление">
+      <span class="grp">Введение</span>
+      <a href="#intro"><span class="k">00</span>Принципы</a>
+      <span class="grp">Основы</span>
+      <a href="#colors"><span class="k">01</span>Цвета</a>
+      <a href="#type"><span class="k">02</span>Типографика</a>
+      <a href="#grid"><span class="k">03</span>Сетка и отступы</a>
+      <a href="#shape"><span class="k">04</span>Радиусы, тени, слои</a>
+      <a href="#motion"><span class="k">05</span>Движение</a>
+      <a href="#icons"><span class="k">06</span>Иконки и логотипы</a>
+      <span class="grp">Компоненты</span>
+      <a href="#buttons"><span class="k">07</span>Кнопки</a>
+      <a href="#inputs"><span class="k">08</span>Поля ввода</a>
+      <a href="#choice"><span class="k">09</span>Выбор</a>
+      <a href="#nav"><span class="k">10</span>Навигация</a>
+      <a href="#cards"><span class="k">11</span>Карточки</a>
+      <a href="#tables"><span class="k">12</span>Таблицы и ведомости</a>
+      <a href="#status"><span class="k">13</span>Статусы</a>
+      <a href="#feedback"><span class="k">14</span>Сообщения и диалоги</a>
+      <a href="#loading"><span class="k">15</span>Загрузки</a>
+      <a href="#empty"><span class="k">16</span>Пустые состояния</a>
+      <a href="#content"><span class="k">17</span>Аккордеон и списки</a>
+      <span class="grp">Шаблоны</span>
+      <a href="#panels"><span class="k">18</span>Структура страницы</a>
+      <a href="#blocks"><span class="k">19</span>Готовые блоки</a>
+      <a href="#pages"><span class="k">20</span>Карта страниц</a>
+      <span class="grp">Реализация</span>
+      <a href="#primevue"><span class="k">21</span>PrimeVue и Nuxt</a>
+      <a href="#writing"><span class="k">22</span>Текст и контент</a>
+      <a href="#a11y"><span class="k">23</span>Доступность</a>
+    </nav>
+  </aside>
+
+  <main class="ds-main">
+    <section class="ds-cover">
+      <div>
+        <span class="kicker">Marscap · store.marscap.ru</span>
+        <h1>Дизайн-система магазина</h1>
+        <p class="lead">Единый источник правды для интерфейса Marscap: токены, типографика, сетка, все компоненты и шаблоны страниц. Каждое значение в документе совпадает с кодом — из этих же токенов собран пресет PrimeVue для Nuxt. Документ живой: обновляется вместе с редизайном страниц.</p>
+      </div>
+      <div class="ds-cover-meta">
+        <div><b>Версия</b><span>1.0 — покрывает виртуальную карту, страницу сервиса, каталог, оформление, кабинет, вход, инфостраницы</span></div>
+        <div><b>Стек</b><span>Nuxt 3 · PrimeVue 4 (styled mode, пресет Aura) · CSS-токены</span></div>
+        <div><b>Темы</b><span>Тёмная — основная на сайте, светлая — переключается в шапке. В документе превью можно переключать сверху</span></div>
+        <div><b>Шрифты</b><span>Onest · Golos Text · Inter · JetBrains Mono — все с кириллицей, Google Fonts</span></div>
+      </div>
+    </section>
+
+    <nav class="ds-toc" aria-label="Разделы">
+      <a href="#colors"><b><i>01–06</i>Основы</b><span>Цвета, шрифты, сетка, форма, движение, иконки</span></a>
+      <a href="#buttons"><b><i>07–17</i>Компоненты</b><span>Всё, из чего собираются экраны, с состояниями и размерами</span></a>
+      <a href="#panels"><b><i>18–20</i>Шаблоны</b><span>Структура страницы, готовые блоки и карта всех страниц сайта</span></a>
+      <a href="#primevue"><b><i>21–23</i>Реализация</b><span>PrimeVue-маппинг, пресет, правила текста и доступности</span></a>
+    </nav>
+
+    <!-- ====================== 00 ПРИНЦИПЫ ====================== -->
+    <section class="ds-section" id="intro">
+      <div class="ds-h"><span class="kicker"><i>00</i>Введение</span><h2>Принципы</h2><p>Пять правил, по которым принимаются решения, когда в документе нет готового ответа. Если новый компонент нарушает одно из них — сначала меняется правило, потом компонент.</p></div>
+      <div class="ds-block">
+        <div class="num-grid">
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Одно действие на экран</h3><p>В видимой области ровно одна залитая кнопка. Всё остальное — ghost, ссылки и плитки. Пользователь всегда видит, что делать дальше.</p></article>
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Цифры — моноширинные</h3><p>Суммы, курс, номиналы и номера — JetBrains Mono с табличными цифрами. Итог не «прыгает» при пересчёте, столбцы выравниваются сами.</p></article>
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Роли, не значения</h3><p>Компоненты знают только роли (<code>--accent</code>, <code>--surface</code>), а не примитивы. Тема меняется подменой ролей; ни одна кнопка не правится вручную.</p></article>
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Логотипы не трогаем</h3><p>Иконки категорий и логотипы сервисов используются как есть: не перекрашиваются, не обрезаются, не заменяются. Меняется только подложка под ними.</p></article>
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Движение — opt-in</h3><p>Анимации живут внутри <code>prefers-reduced-motion: no-preference</code>. Без них страница полностью рабочая, у каждого состояния есть цвет или текст.</p></article>
+          <article class="card num-card" style="background:#fff;border-color:var(--doc-line)"><span class="idx"></span><h3 style="color:var(--doc-ink)">Ошибка — инструкция</h3><p>Сообщение говорит, что случилось и как исправить, рядом с местом поломки. Без «Упс», без восклицательных знаков, без «мы столкнулись с проблемой».</p></article>
+        </div>
+      </div>
+      <div class="ds-block">
+        <h3>Как пользоваться документом</h3>
+        <p>Каждый компонент описан по одной схеме: живое превью, таблица размеров и токенов, состояния, «можно / нельзя» и соответствие в PrimeVue. У превью есть кнопка «Код» — она показывает разметку, которую можно копировать. Переключатель «Превью компонентов» в шапке показывает те же компоненты в тёмной теме сайта; у каждого превью есть и локальный переключатель.</p>
+        <div class="ds-callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div><b>Источник правды — токены.</b> Все значения в таблицах взяты из <code>base.css</code> и <code>pv-preset.js</code>. Если документ и код разошлись — прав код, документ обновляется в тот же день.</div></div>
+      </div>
+    </section>

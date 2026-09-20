@@ -1,0 +1,255 @@
+    <!-- ====================== 07 КНОПКИ ====================== -->
+    <section class="ds-section" id="buttons">
+      <div class="ds-h"><span class="kicker"><i>07</i>Компоненты</span><h2>Кнопки</h2><p>Два вида: <b>primary</b> — одно главное действие на экране, <b>ghost</b> — всё остальное. Подпись начинается с глагола и называет результат: «Оплатить 2 407 ₽», а не «ОК». Ссылка, которая ведёт на другую страницу, выглядит как ссылка, а не как кнопка — кроме hero и мобильного меню.</p></div>
+      <div class="ds-block">
+        <h3>Виды и состояния</h3>
+        <div class="ds-demo" data-name="Кнопки"><div class="demo-in">
+          <span class="lbl">Primary · 48px</span>
+          <button type="button" class="btn btn-primary">Рассчитать и оформить</button>
+          <button type="button" class="btn btn-primary is-loading" aria-label="Оплата, подождите">Оплатить 2 407 ₽</button>
+          <button type="button" class="btn btn-primary" disabled>Недоступно</button>
+          <span class="lbl">Ghost · 48px</span>
+          <button type="button" class="btn btn-ghost">Как это работает</button>
+          <button type="button" class="btn btn-ghost is-loading" aria-label="Загрузка">Показать ещё</button>
+          <button type="button" class="btn btn-ghost" disabled>Недоступно</button>
+          <span class="lbl">Малая · 38px</span>
+          <button type="button" class="btn btn-primary btn-sm">Выпустить карту</button>
+          <button type="button" class="btn btn-ghost btn-sm">Показать ещё 20</button>
+          <button type="button" class="btn btn-ghost btn-sm"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>Добавить</button>
+          <span class="lbl">Иконочная · 38px</span>
+          <button type="button" class="icon-btn" aria-label="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
+          <button type="button" class="icon-btn plain" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+          <span class="lbl">Ссылка-действие</span>
+          <a class="arrow-link" href="#">Перейти в каталог<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="#">Обычная ссылка в тексте</a>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Размеры и поведение</h3>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Высота</td><td>48px обычная, 38px малая и иконочная, 42 в футере диалога. Минимальная зона касания на тач — 44px, выдерживается отступами.</td></tr>
+          <tr><td>Отступы</td><td>0 22px (обычная), 0 16px (малая). Радиус 12px. Шрифт Golos 600 (обычная) / 500 (малая). Иконка 16px, отступ до текста 9px.</td></tr>
+          <tr><td>Primary</td><td>Градиент 180° <code>--accent-solid → --accent-solid-2</code> (blue-600 → blue-700), белый текст, кромка 1px белого 14% сверху, свечение <code>--glow</code>. На hover — блик слева направо 900 ms и глубже тень.</td></tr>
+          <tr><td>Ghost</td><td>Фон <code>--tint-2</code>, рамка <code>--line-strong</code>, текст <code>--text-2</code>. Hover: рамка <code>--ink-600</code>, фон <code>--tint-3</code>, текст <code>--text</code>.</td></tr>
+          <tr><td>Фокус</td><td>Кольцо 2px <code>--focus</code> с отступом 2px, только <code>:focus-visible</code>.</td></tr>
+          <tr><td>Загрузка</td><td>Текст прозрачный, спиннер по центру, ширина кнопки не меняется, <code>pointer-events: none</code>. Кнопка остаётся в фокусе и получает <code>aria-label</code> с описанием.</td></tr>
+          <tr><td>Заблокирована</td><td>Прозрачность .5, без тени; primary — фон <code>--ink-600</code>. Только когда действие действительно недоступно: кнопка отправки формы <em>не</em> блокируется до валидации — валидируем по нажатию.</td></tr>
+          <tr><td>Ряд кнопок</td><td>Отступ 12px, primary первая слева (на мобильном — сверху и на всю ширину). Не больше двух в ряду.</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <div class="dd">
+          <div class="do"><b>Можно</b><ul><li>«Оплатить 2 407 ₽», «Выпустить карту», «Показать ещё 20» — глагол + результат.</li><li>Сумму в кнопке обновлять вживую вместе с расчётом.</li><li>Иконка только слева и только если помогает узнать действие.</li></ul></div>
+          <div class="dont"><b>Нельзя</b><ul><li>«ОК», «Далее», «Отправить» без контекста.</li><li>Две primary рядом; primary для «Отмена».</li><li>Кнопка шире контента без причины — растягиваем только в расчёте, hero на мобильном и в пустых состояниях.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 08 ПОЛЯ ====================== -->
+    <section class="ds-section" id="inputs">
+      <div class="ds-h"><span class="kicker"><i>08</i>Компоненты</span><h2>Поля ввода</h2><p>У каждого поля видимая подпись (<code>&lt;label for&gt;</code>), плейсхолдер — только пример формата. Подсказка стоит до ошибки, ошибка — рядом с полем и говорит, как исправить. Валидация по нажатию кнопки, не во время набора; после первой ошибки — при каждом изменении.</p></div>
+      <div class="ds-block">
+        <h3>Текстовые поля</h3>
+        <div class="ds-demo" data-name="Поля"><div class="demo-in grid">
+          <div class="field"><label for="f1">Электронная почта</label><input id="f1" type="email" placeholder="mail@example.ru" autocomplete="email"><p class="hint">Отправим номер карты, срок, CVC и инструкцию.</p></div>
+          <div class="field"><label for="f2">Электронная почта</label><input id="f2" type="email" value="mail@example" aria-invalid="true" aria-describedby="f2e"><p class="hint err" id="f2e">Укажите почту в виде mail@example.ru — на неё придут реквизиты.</p></div>
+          <div class="field"><label for="f3">Номинал в долларах</label><div class="input-wrap"><span class="prefix">$</span><input id="f3" type="number" min="5" max="500" value="50" inputmode="numeric"></div><p class="hint">От $5 до $500</p></div>
+          <div class="field"><label for="f4">Пароль</label><div class="input-wrap"><input id="f4" type="password" value="marscap2026" autocomplete="current-password"><button type="button" class="input-btn" aria-label="Показать пароль" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="hint">Не меньше 8 символов</p></div>
+          <div class="field is-disabled"><label for="f5">Промокод</label><input id="f5" type="text" value="WELCOME" disabled><p class="hint">Промокоды временно недоступны</p></div>
+          <div class="search" style="max-width:none"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg><input type="search" placeholder="Название сервиса" aria-label="Поиск по сервисам"></div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Список, многострочное поле, группа</h3>
+        <div class="ds-demo" data-name="Select · textarea"><div class="demo-in grid">
+          <div class="field"><label for="f6">Категория</label><select id="f6"><option>Нейросети</option><option selected>Работа и продуктивность</option><option>Дизайн</option><option>Игры</option><option>Развлечения</option></select></div>
+          <div class="field"><label for="f7">Сообщение <span class="req" aria-hidden="true">*</span></label><textarea id="f7" placeholder="Опишите, что произошло: сервис, сумма, время оплаты" maxlength="600"></textarea><span class="count">0 / 600</span></div>
+          <div class="form-row" style="grid-column:1/-1"><div class="field"><label for="f8">Имя</label><input id="f8" type="text" autocomplete="given-name"></div><div class="field"><label for="f9">Телефон</label><input id="f9" type="tel" placeholder="+7 900 000-00-00" inputmode="tel" autocomplete="tel"></div></div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Размеры и состояния</h3>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Поле</td><td>Высота 48px, отступ 0 14px, радиус 12px, рамка <code>--line-strong</code>, фон <code>--surface</code>, шрифт 16px <code>--text</code>. Поиск — 44px, иконка слева, отступ 40.</td></tr>
+          <tr><td>Подпись</td><td>13.5px <code>--text-3</code>, над полем, отступ 7px. Обязательность — звёздочка <code>--status-err</code> только если в форме есть необязательные поля.</td></tr>
+          <tr><td>Подсказка</td><td>12.5px <code>--text-4</code> под полем; ошибка — тот же слот, цвет <code>--status-err</code>, связана через <code>aria-describedby</code>.</td></tr>
+          <tr><td>Hover</td><td>Рамка <code>--ink-600</code>.</td></tr>
+          <tr><td>Фокус</td><td>Рамка blue-500 + внешнее кольцо 3px на 30% синего. Стандартный outline снят только здесь, потому что заменён.</td></tr>
+          <tr><td>Ошибка</td><td>Рамка <code>--status-err</code>, <code>aria-invalid="true"</code>, фокус переносится в первое ошибочное поле.</td></tr>
+          <tr><td>Заблокировано</td><td>Прозрачность .55, фон <code>--surface-2</code>, курсор not-allowed, подпись <code>--text-4</code>.</td></tr>
+          <tr><td>Select</td><td>Нативный, стрелка 18px справа (отступ 12), <code>appearance: none</code>. Для поиска по списку и мультивыбора — PrimeVue Select / MultiSelect.</td></tr>
+          <tr><td>Textarea</td><td>Мин. высота 112, отступ 12 14, растягивается только по вертикали, счётчик символов моноширинный справа.</td></tr>
+          <tr><td>Кнопка в поле</td><td>36px, справа с отступом 6; переключение пароля меняет <code>aria-pressed</code> и подпись.</td></tr>
+          <tr><td>Автозаполнение</td><td>Всегда <code>autocomplete</code> и <code>inputmode</code>: email, tel, numeric, current-password.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 09 ВЫБОР ====================== -->
+    <section class="ds-section" id="choice">
+      <div class="ds-h"><span class="kicker"><i>09</i>Компоненты</span><h2>Выбор</h2><p>Один из вариантов: сегмент — для 2–3 взаимоисключающих режимов, плитки — для вариантов с ценой или описанием, чипы — для фильтров. Несколько: чекбоксы. Включить/выключить: переключатель. Все — настоящие <code>&lt;button&gt;</code> или <code>&lt;input&gt;</code> с <code>aria-pressed</code> / <code>aria-selected</code> / <code>role="switch"</code>.</p></div>
+      <div class="ds-block">
+        <h3>Чекбокс, радио, переключатель</h3>
+        <div class="ds-demo" data-name="Check · Radio · Switch"><div class="demo-in grid">
+          <div class="check-list">
+            <span class="lbl" style="margin:0">Чекбокс · 20px</span>
+            <label class="check"><input type="checkbox" checked><span class="box"></span><span>Согласен с условиями оферты</span></label>
+            <label class="check"><input type="checkbox"><span class="box"></span><span>Присылать новости о сервисах<span class="sub">Не чаще раза в месяц</span></span></label>
+            <label class="check"><input type="checkbox" id="ind"><span class="box"></span><span>Выбрать все категории</span></label>
+            <label class="check"><input type="checkbox" disabled checked><span class="box"></span><span>Оплата через СБП</span></label>
+            <label class="check is-invalid"><input type="checkbox" aria-invalid="true"><span class="box"></span><span>Подтверждаю, что почта указана верно</span></label>
+          </div>
+          <div class="check-list">
+            <span class="lbl" style="margin:0">Радио</span>
+            <label class="check radio"><input type="radio" name="r" checked><span class="box"></span><span>Одна карта на $100</span></label>
+            <label class="check radio"><input type="radio" name="r"><span class="box"></span><span>Две карты по $50<span class="sub">Удобно для двух сервисов</span></span></label>
+            <label class="check radio"><input type="radio" name="r" disabled><span class="box"></span><span>Корпоративная карта</span></label>
+          </div>
+          <div class="check-list">
+            <span class="lbl" style="margin:0">Переключатель · 40×24</span>
+            <label class="toggle"><input type="checkbox" role="switch" checked><span class="knob"></span><span>Уведомлять о списаниях</span></label>
+            <label class="toggle"><input type="checkbox" role="switch"><span class="knob"></span><span>Тёмная тема</span></label>
+            <label class="toggle"><input type="checkbox" role="switch" disabled><span class="knob"></span><span>Двухфакторная защита</span></label>
+          </div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Сегмент, плитки, чипы</h3>
+        <div class="ds-demo" data-name="Сегмент и плитки"><div class="demo-in col">
+          <span class="lbl">Сегмент · 2–3 режима</span>
+          <div class="switch" role="group" aria-label="Способ ввода суммы"><button type="button" aria-pressed="true">Из списка</button><button type="button" aria-pressed="false">Своя сумма</button></div>
+          <span class="lbl">Плитки номинала · 120px+</span>
+          <div class="denoms"><button type="button" class="denom"><b>$10</b><span>1 364 ₽</span></button><button type="button" class="denom" aria-pressed="true"><b>$20</b><span>2 327 ₽</span></button><button type="button" class="denom"><b>$50</b><span>5 215 ₽</span></button><button type="button" class="denom"><b>$100</b><span>10 028 ₽</span></button></div>
+          <span class="lbl">Плитки плана · 150px+ · мин. высота 88</span>
+          <div class="plans"><button type="button" class="plan"><b>Hobby</b><span class="price">Бесплатно</span><span class="rub">2 407 ₽</span></button><button type="button" class="plan" aria-pressed="true"><b>Pro</b><span class="price">$20 / мес</span><span class="rub">2 407 ₽</span></button><button type="button" class="plan"><b>Enterprise</b><span class="price">По запросу</span><span class="rub ask">по запросу</span></button></div>
+          <span class="lbl">Плитки сервисов · 186px+ · ссылка или кнопка</span>
+          <div class="tiles"><a class="tile tile-link" href="#"><img alt="" data-logo="Cursor AI"><span class="t"><b>Cursor AI</b><span class="cat-name">Нейросети</span></span></a><button type="button" class="tile" aria-pressed="true"><img alt="" data-logo="Netflix"><span class="t"><b>Netflix</b><span>от $7.99</span></span></button><a class="tile tile-link is-current" href="#"><img alt="" data-logo="Figma"><span class="t"><b>Figma</b><span class="cat-name">Дизайн</span></span></a></div>
+          <span class="lbl">Чипы категорий · 40px · pill</span>
+          <div class="cats" id="dsCats"></div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Способ оплаты</h3>
+        <p>Плитка с иконкой, названием и подписью. В отличие от плиток номинала — горизонтальная, потому что у способа есть логотип. Недоступный способ показывается, но помечен.</p>
+        <div class="ds-demo" data-name="Способы оплаты"><div class="demo-in col">
+          <div class="methods">
+            <button type="button" class="method" aria-pressed="true"><span class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h3v3M20 20h-3"/></svg></span><span><b>СБП</b><span>QR-код, без комиссии</span></span></button>
+            <button type="button" class="method"><span class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/></svg></span><span><b>Карта РФ</b><span>Visa, Mir, Mastercard</span></span></button>
+            <button type="button" class="method" aria-disabled="true"><span class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a2 2 0 0 1 0 4H9"/></svg></span><span><b>Крипта</b><span>Скоро</span></span></button>
+          </div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Размеры</h3>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Чекбокс / радио</td><td>20px, радиус 6 (радио — круг), рамка <code>--line-strong</code>, фон <code>--surface</code>; отмечен — заливка <code>--accent-solid</code>, белая галочка 11px. Текст 14.5px, подпись под ним 12.5 <code>--text-4</code>. Зона клика — вся подпись.</td></tr>
+          <tr><td>Переключатель</td><td>40×24, кружок 16, сдвиг 16px; включён — <code>--accent-solid</code>, белый кружок. Всегда <code>role="switch"</code>, подпись справа, изменение применяется сразу без кнопки «Сохранить».</td></tr>
+          <tr><td>Сегмент</td><td>Контейнер <code>--surface</code> с рамкой <code>--line</code>, отступ 3, радиус 12; кнопка 34px, радиус 9; активная — <code>--surface-2</code> + внутренняя рамка. Не больше 3 вариантов, иначе — вкладки или select.</td></tr>
+          <tr><td>Плитка</td><td>Мин. высота 56 (сервис) / 88 (план), радиус 14, фон <code>--surface</code>; выбранная — рамка blue-500 + внутреннее кольцо 1px + 12% синего в фоне + галочка 16px в углу. Текущая страница в витрине — <code>.is-current</code> с приставкой «· вы здесь».</td></tr>
+          <tr><td>Чип</td><td>Высота 40, pill, иконка 22px, счётчик моноширинный; ряд прокручивается горизонтально с затуханием справа 40px.</td></tr>
+          <tr><td>Способ оплаты</td><td>Мин. высота 64, иконка 38 в квадрате 10px радиус на <code>--panel-solid</code>; выбранный — как плитка.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 10 НАВИГАЦИЯ ====================== -->
+    <section class="ds-section" id="nav">
+      <div class="ds-h"><span class="kicker"><i>10</i>Компоненты</span><h2>Навигация</h2><p>Шапка одна на весь сайт: бренд, пять ссылок, «Войти», переключатель темы. Каталог раскрывается списком категорий. На узком экране меню превращается в шторку. Внутри страниц — крошки, вкладки, шаги и пагинация; в кабинете — боковое меню.</p></div>
+      <div class="ds-block">
+        <h3>Шапка сайта</h3>
+        <div class="ds-demo" data-name="Header · 64px · sticky · blur 14"><div class="demo-in pad0">
+          <header class="site-head" style="width:100%">
+            <div class="wrap head-row">
+              <a class="brand" href="#"><img class="brand-mark" src="{{LOGO}}" alt="">Marscap</a>
+              <nav class="site-nav" aria-label="Основная навигация">
+                <div class="has-menu"><a href="#" aria-haspopup="true">Каталог<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a><ul class="menu is-open" id="dsMenuList"></ul></div>
+                <a href="#" aria-current="page">Виртуальная карта</a>
+                <a href="#">Как это работает</a>
+                <a href="#">Поддержка</a>
+                <a href="#">FAQ</a>
+              </nav>
+              <a class="head-login" href="#">Войти</a>
+              <button type="button" class="theme-btn" aria-label="Включить светлую тему" aria-pressed="false"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></button>
+            </div>
+          </header>
+          <div style="height:330px;width:100%"></div>
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Геометрия</td><td>Высота 64, sticky, фон <code>--ground</code> 72% + blur 14, нижняя рамка <code>--line</code>. Бренд слева, навигация прижата вправо, отступ между группами 28.</td></tr>
+          <tr><td>Ссылка</td><td>14px <code>--text-3</code>, отступ 7 11, радиус 8; hover — <code>--tint</code>; текущая — <code>aria-current="page"</code>, фон 14% синего, текст <code>--text</code>.</td></tr>
+          <tr><td>Выпадающее меню</td><td>Появляется по hover и по фокусу (клавиатура), список категорий с иконкой 20px и счётчиком; поднятый слой, радиус 14, отступ 6, ссылка 8 10 радиус 9.</td></tr>
+          <tr><td>Войти</td><td>Ghost-стиль 14px, отступ 8 14. Авторизованный — аватар-чип 28px с именем вместо ссылки.</td></tr>
+          <tr><td>Тема</td><td>Иконочная кнопка 38px, иконки луны и солнца сменяются с размытием 200 ms; выбор хранится в <code>localStorage('mc-theme')</code>, применяется до первой отрисовки.</td></tr>
+          <tr><td>≤ 900px</td><td>Навигация скрывается, справа — кнопка-бургер, открывающая шторку.</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Мобильное меню</h3>
+        <div class="ds-demo" data-name="Drawer · шторка справа"><div class="demo-in">
+          <div class="drawer" role="dialog" aria-label="Меню">
+            <div class="drawer-head"><a class="brand" href="#"><img class="brand-mark" src="{{LOGO}}" alt="">Marscap</a><button type="button" class="icon-btn plain" aria-label="Закрыть меню"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+            <a href="#">Каталог</a><a href="#" aria-current="page">Виртуальная карта</a><a href="#">Как это работает</a><a href="#">Поддержка</a><a href="#">FAQ</a><a href="#">Контакты</a>
+            <a class="btn btn-primary" href="#">Выпустить карту</a>
+            <a class="btn btn-ghost" href="#">Войти</a>
+          </div>
+        </div></div>
+        <p>Ширина min(84vw, 320px), выезжает справа за 300 ms, фон страницы затемняется. Фокус переносится внутрь, Esc и клик по затемнению закрывают. Ссылки 15.5px, высота 44; primary-кнопка внизу — единственное место, где действие hero дублируется.</p>
+      </div>
+      <div class="ds-block">
+        <h3>Крошки, вкладки, пагинация</h3>
+        <div class="ds-demo" data-name="Breadcrumbs · Tabs · Pagination"><div class="demo-in col">
+          <span class="lbl">Хлебные крошки · 13.5px</span>
+          <nav class="crumbs" aria-label="Вы здесь"><a href="#">Каталог</a><span class="sep">/</span><a href="#"><img alt="" data-cat="ai">Нейросети</a><span class="sep">/</span><span aria-current="page">Cursor AI</span></nav>
+          <span class="lbl">Вкладки · подчёркивание 2px</span>
+          <div class="tabs" role="tablist" aria-label="Кабинет"><button type="button" role="tab" aria-selected="true">Обзор</button><button type="button" role="tab" aria-selected="false">Карты<span class="n">3</span></button><button type="button" role="tab" aria-selected="false">Покупки<span class="n">12</span></button><button type="button" role="tab" aria-selected="false">Профиль</button></div>
+          <span class="lbl">Пагинация · 38px · только там, где нет «Показать ещё»</span>
+          <nav class="pager" aria-label="Страницы"><a href="#" aria-disabled="true" aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></a><a href="#" aria-current="page">1</a><a href="#">2</a><a href="#">3</a><span class="gap">…</span><a href="#">12</a><a href="#" aria-label="Вперёд"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></a></nav>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Шаги процесса</h3>
+        <p>Для оформления: номинал → почта → оплата → готово. Пройденные шаги кликабельны и ведут назад, будущие — нет. На узком экране — вертикально.</p>
+        <div class="ds-demo" data-name="Stepper"><div class="demo-in col">
+          <ol class="stepper"><li class="done"><span class="dot">1</span><span class="st">Номинал</span></li><li class="done"><span class="dot">2</span><span class="st">Почта</span></li><li class="current" aria-current="step"><span class="dot">3</span><span class="st">Оплата</span></li><li><span class="dot">4</span><span class="st">Готово</span></li></ol>
+          <ol class="stepper vertical" style="max-width:320px"><li class="done"><span class="dot">1</span><span class="st">Номинал<span class="sub" style="display:block;font-size:12.5px;color:var(--text-4)">$50 · 5 215 ₽</span></span></li><li class="current" aria-current="step"><span class="dot">2</span><span class="st">Почта</span></li><li><span class="dot">3</span><span class="st">Оплата</span></li></ol>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Боковое меню кабинета</h3>
+        <div class="ds-demo" data-name="Side nav · 240px"><div class="demo-in" style="align-items:flex-start;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:12px;width:240px">
+            <div class="user-chip"><span class="avatar">ИП</span><div><b>Иван Петров</b><span>ivan@example.ru</span></div></div>
+            <nav class="side-nav" aria-label="Кабинет">
+              <a href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>Обзор</a>
+              <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/></svg>Карты<span class="n">3</span></a>
+              <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16l-1.5 9h-13z"/><circle cx="9" cy="19" r="1.2"/><circle cx="16" cy="19" r="1.2"/></svg>Покупки<span class="n">12</span></a>
+              <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Профиль</a>
+              <span class="sep"></span>
+              <button type="button" class="danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9"/></svg>Выйти</button>
+            </nav>
+          </div>
+          <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:12px"><div class="kpi-grid"><div class="kpi"><span class="k">Активных карт</span><span class="v">3</span><span class="d">из 5 выпущенных</span></div><div class="kpi"><span class="k">Потрачено</span><span class="v">24 810<small>₽</small></span><span class="d up">+2 407 ₽ за месяц</span></div></div><div class="empty" style="padding:24px"><b>Покупок пока нет</b><p>Здесь появится история оплат сервисов.</p></div></div>
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Ширина</td><td>240px, sticky под шапкой; ≤ 1100px — превращается во вкладки над контентом.</td></tr>
+          <tr><td>Пункт</td><td>14.5px, иконка 18 <code>--text-4</code>, отступ 9 12, радиус 8; текущий — 14% синего, иконка <code>--accent</code>; счётчик моноширинный справа.</td></tr>
+          <tr><td>Пользователь</td><td>Чип с аватаром 36 (инициалы на градиенте бренда), именем 14 и почтой 12.5, обрезаются многоточием.</td></tr>
+          <tr><td>Выход</td><td>Внизу после разделителя, цвет <code>--status-err</code>, подтверждение диалогом не нужно.</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Футер</h3>
+        <div class="ds-demo" data-name="Footer · 4 колонки"><div class="demo-in pad0">
+          <footer class="site-foot" style="width:100%"><div class="wrap">
+            <div class="foot-grid">
+              <div class="foot-col"><a class="brand" href="#"><img class="brand-mark" src="{{LOGO}}" alt="">Marscap</a><p class="foot-about">Виртуальные карты и оплата зарубежных сервисов из России. Реквизиты и инструкция — на почту за 15 минут.</p></div>
+              <div class="foot-col"><h4>Каталог</h4><a href="#">Нейросети</a><a href="#">Работа</a><a href="#">Дизайн</a><a href="#">Игры</a><a href="#">Развлечения</a></div>
+              <div class="foot-col"><h4>Компания</h4><a href="#">Как это работает</a><a href="#">Тарифы</a><a href="#">Дорожная карта</a><a href="#">Контакты</a></div>
+              <div class="foot-col"><h4>Помощь</h4><a href="#">Поддержка</a><a href="#">FAQ</a><a href="#">Документы</a><a href="#">Оферта</a><a href="#">Конфиденциальность</a></div>
+            </div>
+            <div class="foot-bottom"><span>© 2026 Marscap</span><span>ИП Иванов И. И. · ИНН 000000000000</span><span>support@marscap.ru</span></div>
+          </div></footer>
+        </div></div>
+        <p>Верхняя рамка <code>--line</code>, фон <code>--ground</code> 82% с blur 10, отступ 40 сверху и 30 снизу. Сетка: бренд с описанием 1.4fr + три колонки ссылок; заголовки колонок — кикер 12px <code>--text-3</code>, ссылки 14px <code>--text-3</code>. Нижняя строка 12.5px с копирайтом и реквизитами. ≤ 620px — две колонки.</p>
+      </div>
+    </section>

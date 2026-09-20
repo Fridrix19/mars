@@ -1,0 +1,39 @@
+/* ——— мост PrimeVue → визуальный язык Marscap (то, что не выражается токенами пресета) ——— */
+[v-cloak]{visibility:hidden}
+.vc-pv .p-button{font-family:var(--font-body); min-height:48px}
+.vc-pv .p-button:not(.p-button-outlined):not(.p-button-text){background:linear-gradient(180deg,var(--accent-solid),var(--accent-solid-2)); border-color:transparent; box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 10px 26px -10px var(--glow); position:relative; overflow:hidden}
+.vc-pv .p-button:not(.p-button-outlined):not(.p-button-text):hover{box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 14px 34px -10px var(--glow)}
+.vc-pv .p-button.pay{width:100%}
+.vc-pv .p-button-sm{min-height:38px}
+.vc-pv .mode-switch{align-self:flex-start; gap:3px; padding:3px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md)}
+.vc-pv .mode-switch .p-togglebutton{border:0; background:transparent; color:var(--text-3); border-radius:9px; padding:7px 15px; font-size:13.5px; font-weight:400}
+.vc-pv .mode-switch .p-togglebutton.p-togglebutton-checked{background:var(--surface-2); color:var(--text); box-shadow:inset 0 0 0 1px var(--line-strong)}
+.vc-pv .mode-switch .p-togglebutton .p-togglebutton-content{background:transparent; box-shadow:none; padding:0}
+.vc-pv .denoms.p-selectbutton{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; background:none; border:0}
+.vc-pv .denoms .p-togglebutton{border:1px solid var(--line); border-radius:14px !important; background:var(--surface); color:var(--text-2); padding:0; text-align:start; box-shadow:none}
+.vc-pv .denoms .p-togglebutton .p-togglebutton-content{display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:14px 16px; background:transparent; box-shadow:none; width:100%}
+.vc-pv .denoms .p-togglebutton b{font-family:var(--font-mono); font-size:20px; font-weight:500; color:var(--text); font-variant-numeric:tabular-nums}
+.vc-pv .denoms .p-togglebutton span{font-family:var(--font-mono); font-size:12.5px; color:var(--text-4); font-variant-numeric:tabular-nums}
+.vc-pv .denoms .p-togglebutton:hover{border-color:var(--ink-600); background:var(--surface-2)}
+.vc-pv .denoms .p-togglebutton.p-togglebutton-checked{border-color:var(--blue-500); background:color-mix(in oklab,var(--blue-500) 12%,var(--surface)); box-shadow:0 0 0 1px var(--blue-500) inset, 0 12px 30px -14px var(--glow)}
+.vc-pv .denoms .p-togglebutton.p-togglebutton-checked span{color:var(--text-3)}
+.vc-pv .p-inputtext{font-family:var(--font-body); font-size:16px; min-height:48px; width:100%}
+.vc-pv .p-inputnumber .p-inputtext{min-height:48px}
+.vc-pv .p-inputnumber-button{border-color:var(--line-strong); background:var(--surface); color:var(--text-2); width:44px}
+.vc-pv .p-inputnumber-button:hover{background:var(--surface-2); color:var(--text)}
+.vc-pv .p-message-simple .p-message-text{font-size:12.5px; color:var(--status-err)}
+.vc-pv .search-pv{flex:1 1 260px; max-width:340px}
+.vc-pv .search-pv .p-inputtext{min-height:44px; font-size:15px}
+.vc-pv .cats-pv .p-tablist-tab-list{border-block-end:1px solid var(--line); gap:2px}
+.vc-pv .cats-pv .p-tab{display:inline-flex; align-items:center; gap:8px; color:var(--text-3); font-size:13.5px; font-family:var(--font-body); white-space:nowrap}
+.vc-pv .cats-pv .p-tab img{width:20px; height:20px}
+.vc-pv .cats-pv .p-tab .n{font-family:var(--font-mono); font-size:11.5px; color:var(--text-4)}
+.vc-pv .cats-pv .p-tab.p-tab-active{color:var(--text)} .vc-pv .cats-pv .p-tab.p-tab-active .n{color:var(--accent)}
+.vc-pv .cats-pv .p-tablist-nav-button{background:var(--panel-solid); color:var(--text-3); box-shadow:none}
+.vc-pv .tiles-foot .p-button{min-height:38px}
+.p-toast .p-toast-message{background:var(--panel-solid); border:1px solid var(--line-strong); color:var(--text-2); box-shadow:0 20px 50px -20px var(--shadow)}
+.p-toast .p-toast-summary{color:var(--text); font-weight:600} .p-toast .p-toast-detail{color:var(--text-2)}
+@media (prefers-reduced-motion:no-preference){
+  .vc-pv .denoms .p-togglebutton{transition:background-color .15s ease,border-color .15s ease,box-shadow .2s ease,translate .2s var(--ease)}
+  .vc-pv .denoms .p-togglebutton:hover{translate:0 -2px}
+}

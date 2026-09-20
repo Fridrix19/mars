@@ -1,0 +1,249 @@
+    <!-- ====================== 01 ЦВЕТА ====================== -->
+    <section class="ds-section" id="colors">
+      <div class="ds-h"><span class="kicker"><i>01</i>Основы</span><h2>Цвета</h2><p>Два уровня. <b>Примитивы</b> названы по оттенку и в компонентах не используются. <b>Роли</b> названы по задаче и указывают на примитив — это единственное, что видят компоненты. Так тема меняется подменой ролей, а не правкой каждой кнопки.</p></div>
+
+      <div class="ds-block">
+        <h3>Нейтраль «ink» — oklch, оттенок 265°</h3>
+        <p>Земля <code>#090D18</code> — фирменный фон галактики, от него построен весь ряд. Шаги идут по воспринимаемой светлоте, оттенок один на всём ряду. Нажмите на образец, чтобы скопировать hex.</p>
+        <div class="ramp" id="rampInk"></div>
+      </div>
+      <div class="ds-block">
+        <h3>Акцент «blue» — oklch, оттенок 262°</h3>
+        <p>Один акцент на весь интерфейс, и он значит одно: «с этим можно взаимодействовать». Ссылки, выбранные состояния, залитая кнопка. На статичный текст синий не ставится.</p>
+        <div class="ramp" id="rampBlue"></div>
+      </div>
+      <div class="ds-block">
+        <h3>Дополнительные и статусные</h3>
+        <p>Cyan и violet — только декор (градиенты, свечение, знак бренда). Статусные цвета отделены от акцента, чтобы «ошибка» и «кнопка» не читались одинаково. У каждого статуса две версии: светлая для тёмной темы, тёмная для светлой.</p>
+        <div class="ramp" id="rampExtra"></div>
+      </div>
+      <div class="ds-block">
+        <h3>Роли — что на что указывает</h3>
+        <p>Слева в образце — значение в тёмной теме (сверху) и в светлой (снизу). Справа — токен и где он применяется.</p>
+        <div class="roles" id="roles"></div>
+      </div>
+      <div class="ds-block">
+        <h3>Контраст — измерено, не подобрано</h3>
+        <p>Порог WCAG AA для текста — 4,5:1, для крупного текста и элементов управления — 3:1. Все пары ниже проходят; там, где запас маленький, стоит пометка.</p>
+        <div class="spec-wrap"><table class="spec">
+          <thead><tr><th>Пара</th><th>Тёмная</th><th>Светлая</th><th>Где</th></tr></thead>
+          <tbody>
+            <tr><td>text / surface</td><td class="num">14,6:1</td><td class="num">16,1:1</td><td>заголовки на плитках и в панелях</td></tr>
+            <tr><td>text-2 / panel</td><td class="num">10,6:1</td><td class="num">10,3:1</td><td>основной текст</td></tr>
+            <tr><td>text-3 / surface</td><td class="num">6,7:1</td><td class="num">5,5:1</td><td>подписи, вторичный текст</td></tr>
+            <tr><td>text-4 / bg</td><td class="num">5,1:1</td><td class="num">5,3:1</td><td>только на фоне и панелях, <span class="warn">не на плитках</span></td></tr>
+            <tr><td>accent / surface</td><td class="num">6,4:1</td><td class="num">7,2:1</td><td>ссылки, кикеры, номера шагов</td></tr>
+            <tr><td>белый / кнопка primary</td><td class="num">5,5:1</td><td class="num">5,5:1</td><td>худшая точка градиента</td></tr>
+            <tr><td>status-err / surface</td><td class="num">6,3:1</td><td class="num">4,7:1</td><td>текст ошибки</td></tr>
+            <tr><td>status-ok / surface</td><td class="num">8,8:1</td><td class="num">4,6:1</td><td>текст успеха</td></tr>
+            <tr><td>status-warn / surface</td><td class="num">9,1:1</td><td class="num">4,9:1</td><td>текст предупреждения</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Правила</h3>
+        <div class="dd">
+          <div class="do"><b>Можно</b><ul><li>Один синий на всё интерактивное: ссылка, выбранная плитка, кольцо фокуса.</li><li>Статус дублировать точкой, иконкой или текстом — цвет не единственный носитель.</li><li>Новую потребность закрывать новой ролью, а не примитивом в компоненте.</li></ul></div>
+          <div class="dont"><b>Нельзя</b><ul><li><code>var(--blue-400)</code> в CSS кнопки — только <code>var(--accent)</code>.</li><li>Занимать токен «по значению»: цвет разделителя для текста, даже если сегодня подходит.</li><li>Две залитые кнопки в одной видимой области.</li><li>Синий на статичном тексте — он обещает клик.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== 02 ТИПОГРАФИКА ====================== -->
+    <section class="ds-section" id="type">
+      <div class="ds-h"><span class="kicker"><i>02</i>Основы</span><h2>Типографика</h2><p>Четыре семейства, у каждого своя работа. Все с полной кириллицей, грузятся с Google Fonts в формате woff2 с <code>display=swap</code>. Система размеров одна на обе темы.</p></div>
+      <div class="ds-block">
+        <div class="fonts">
+          <div class="font"><div class="sample" style="font-family:var(--font-display);font-weight:700;letter-spacing:-.03em">Onest</div><b>Заголовки h1–h4</b><span>600 / 700. Геометрический гротеск, держит крупный кегль. Также — слово «Marscap» в бренде.</span></div>
+          <div class="font"><div class="sample" style="font-family:var(--font-body);font-weight:400">Golos Text</div><b>Текст и интерфейс</b><span>400 / 500 / 600. Кириллица родная — рисован под русский набор. Кнопки, поля, подписи.</span></div>
+          <div class="font"><div class="sample" style="font-family:var(--font-label);font-weight:600;letter-spacing:.06em;font-size:26px">INTER</div><b>Кикеры и метки</b><span>500 / 600. Капитель с разрядкой .10–.14em: кикеры секций, шапки таблиц, номера шагов, метки KPI.</span></div>
+          <div class="font"><div class="sample" style="font-family:var(--font-mono);font-weight:500">5 215 ₽</div><b>JetBrains Mono</b><span>400 / 500. Только цифры: суммы, курс, номиналы, номер карты, счётчики. Всегда <code>tabular-nums</code>.</span></div>
+        </div>
+      </div>
+      <div class="ds-block">
+        <h3>Шкала</h3>
+        <p>Размеры убывают по уровню — подчинённый никогда не крупнее родителя. Крупные кегли адаптивные через <code>clamp()</code>; от 15px и ниже — фиксированные.</p>
+        <div>
+          <div class="type-row"><div class="h1">Оплачивайте зарубежные сервисы</div><div class="meta">h1 · Onest 700<br>clamp(32px, 4.6vw, 50px)<br>lh 1.06 · ls −.03em</div></div>
+          <div class="type-row"><div class="h2">Два шага до карты</div><div class="meta">h2 · Onest 600<br>clamp(23px, 2.7vw, 30px)<br>lh 1.15 · ls −.02em</div></div>
+          <div class="type-row"><div class="h3">Номинал карты</div><div class="meta">h3 · Onest 600<br>18px · lh 1.25 · ls −.01em</div></div>
+          <div class="type-row"><div class="h4">Платёж подтверждён</div><div class="meta">h4 · Onest 600<br>15px · lh 1.3</div></div>
+          <div class="type-row"><div class="lead">Выберите номинал — выпустим карту и пришлём реквизиты с инструкцией на почту.</div><div class="meta">lead · Golos 400<br>17px · lh 1.6</div></div>
+          <div class="type-row"><div class="body">Сумма считается в долларах и переводится в рубли по курсу ЦБ на момент оплаты.</div><div class="meta">body · Golos 400<br>16px · lh 1.6 · measure 64ch</div></div>
+          <div class="type-row"><div class="small">Проверьте «Спам», затем напишите в поддержку — найдём заказ по email.</div><div class="meta">small · Golos 400<br>14px · lh 1.6</div></div>
+          <div class="type-row"><div class="caption">Отправим номер карты, срок, CVC и инструкцию по привязке.</div><div class="meta">caption · Golos 400<br>12.5–13.5px · lh 1.5</div></div>
+          <div class="type-row"><div class="kicker">Расчёт и оформление</div><div class="meta">kicker · Inter 600<br>12px · ls .12em · uppercase</div></div>
+          <div class="type-row"><div class="mono">$50 → 5 215 ₽ · 80,2254</div><div class="meta">figure · JetBrains Mono 500<br>tabular-nums · ls −.02em у крупных</div></div>
+        </div>
+      </div>
+      <div class="ds-block">
+        <h3>Правила набора</h3>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Заголовки</td><td><code>text-wrap: balance</code> — строки выравниваются по длине, нет «висячего» слова. Регистр предложения, без точки.</td></tr>
+          <tr><td>Описания</td><td><code>text-wrap: pretty</code> — последняя строка не остаётся из одного слова. Ширина не больше 64ch (<code>--measure</code>).</td></tr>
+          <tr><td>Меняющиеся числа</td><td><code>font-variant-numeric: tabular-nums</code> — сумма не «прыгает» при пересчёте. Рубли без копеек, доллары — с двумя знаками только если они есть.</td></tr>
+          <tr><td>Мобильные поля</td><td>Инпуты всегда 16px — iOS не масштабирует страницу при фокусе.</td></tr>
+          <tr><td>Регистр</td><td>Sentence case везде. Капитель только у кикеров, шапок таблиц и меток KPI, через <code>text-transform</code>, не в тексте.</td></tr>
+          <tr><td>Пунктуация</td><td>Кавычки «ёлочки», тире «—», диапазон через «–», неразрывный пробел перед ₽, $ и единицами: <code>2&amp;nbsp;407&amp;nbsp;₽</code>.</td></tr>
+          <tr><td>Ссылки в тексте</td><td>Цвет <code>--accent</code>, подчёркивание <code>from-font</code> со смещением 3px. В навигации и карточках подчёркивания нет.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 03 СЕТКА ====================== -->
+    <section class="ds-section" id="grid">
+      <div class="ds-h"><span class="kicker"><i>03</i>Основы</span><h2>Сетка и отступы</h2><p>Контейнер 1180px с боковым полем <code>clamp(20px, 5vw, 40px)</code>. Внутри — 12 колонок только там, где нужны колонки; большинство блоков — flex/grid с <code>gap</code>, без отдельных margin у элементов.</p></div>
+      <div class="ds-block">
+        <h3>Шаг отступов</h3>
+        <p>База 4px. Между элементами группы — 8–12, между группами — минимум вдвое больше (16–24), между секциями — 30–72 (адаптивно). Отступ говорит о связи: чем ближе, тем сильнее.</p>
+        <div class="ds-demo" data-name="Шкала отступов" data-nocode><div class="demo-in"><div class="space-row">
+          <div class="space"><i style="--s:4px"></i>4</div><div class="space"><i style="--s:8px"></i>8</div><div class="space"><i style="--s:12px"></i>12</div><div class="space"><i style="--s:16px"></i>16</div><div class="space"><i style="--s:20px"></i>20</div><div class="space"><i style="--s:24px"></i>24</div><div class="space"><i style="--s:32px"></i>32</div><div class="space"><i style="--s:44px"></i>44</div><div class="space"><i style="--s:72px"></i>72</div>
+        </div></div></div>
+        <div class="spec-wrap"><table class="spec"><thead><tr><th>Где</th><th>Значение</th></tr></thead><tbody>
+          <tr><td>Внутри компонента</td><td class="num">4 · 6 · 8 — иконка и текст, подпись и поле, строки плитки</td></tr>
+          <tr><td>Между элементами группы</td><td class="num">10 · 12 — плитки в сетке, кнопки в ряду, карточки</td></tr>
+          <tr><td>Между группами</td><td class="num">16 · 22 · 36 — шаги конфигуратора: 36</td></tr>
+          <tr><td>Внутренний отступ панели</td><td class="num">clamp(26px, 4vw, 44px)</td></tr>
+          <tr><td>Между панелями</td><td class="num">clamp(20px, 3vw, 30px)</td></tr>
+          <tr><td>Hero сверху / снизу</td><td class="num">clamp(48px, 7vw, 84px) / clamp(28px, 4vw, 44px)</td></tr>
+          <tr><td>Низ страницы до футера</td><td class="num">clamp(44px, 6vw, 72px)</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Колонки</h3>
+        <p>Типовые разбивки: hero 1.05fr / .95fr, конфигуратор — контент + фиксированная колонка 372px под расчёт, таймлайн и шаги — 4 равные, карточки — <code>auto-fill, minmax(250px, 1fr)</code>.</p>
+        <div class="ds-demo" data-name="12 колонок" data-nocode><div class="demo-in col">
+          <div class="grid-demo"><i class="c8"></i><i class="c4"></i></div>
+          <div class="grid-demo"><i class="c6"></i><i class="c6"></i></div>
+          <div class="grid-demo"><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i></div>
+        </div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Точки перелома</h3>
+        <p>Взяты от контента, не от устройств: ломаем там, где перестаёт помещаться. Минимум — 320px без горизонтального скролла.</p>
+        <div class="spec-wrap"><table class="spec"><thead><tr><th>Ширина</th><th>Что меняется</th></tr></thead><tbody>
+          <tr><td class="num">≤ 1100px</td><td>Кабинет: боковое меню сворачивается в верхние вкладки.</td></tr>
+          <tr><td class="num">≤ 980px</td><td>Конфигуратор в одну колонку, расчёт перестаёт быть sticky; hero в одну колонку, визуал сверху.</td></tr>
+          <tr><td class="num">≤ 900px</td><td>Меню шапки скрывается — мобильное меню-шторка; боковая навигация документации — выдвижная.</td></tr>
+          <tr><td class="num">≤ 820px</td><td>Таймлайн и степпер вертикальные.</td></tr>
+          <tr><td class="num">≤ 620px</td><td>Факты в столбик, кнопки hero на всю ширину, футер в две колонки, радиус панелей 20, QR над текстом.</td></tr>
+          <tr><td class="num">≤ 520px</td><td>Диалог на всю ширину с отступом 20, карточки в одну колонку.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 04 ФОРМА ====================== -->
+    <section class="ds-section" id="shape">
+      <div class="ds-h"><span class="kicker"><i>04</i>Основы</span><h2>Радиусы, тени, слои</h2><p>Форма у Marscap мягкая, но не «пилюльная»: 12px у элементов управления, 14 у плиток, 18 у карточек, 26 у панелей. Тени — только там, где элемент действительно поднят над страницей.</p></div>
+      <div class="ds-block">
+        <h3>Радиусы</h3>
+        <p>Вложенные радиусы концентричны: внешний = внутренний + отступ. Панель 26 → карточка 18 → плитка 14 → иконка внутри плитки 10 → кнопка 12 внутри карточки.</p>
+        <div class="ds-demo" data-name="Радиусы" data-nocode><div class="demo-in"><div class="radius-row">
+          <div class="radius" style="border-radius:6px">6<br>чекбокс</div><div class="radius" style="border-radius:8px">8 · sm<br>ссылки меню</div><div class="radius" style="border-radius:10px">10<br>лого в плитке</div><div class="radius" style="border-radius:12px">12 · md<br>кнопки, поля</div><div class="radius" style="border-radius:14px">14<br>плитки</div><div class="radius" style="border-radius:18px">18 · lg<br>карточки</div><div class="radius" style="border-radius:26px">26 · xl<br>панели</div><div class="radius" style="border-radius:999px">pill<br>бейджи, чипы</div>
+        </div></div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Слои и тени</h3>
+        <p>Четыре уровня. Каждый следующий светлее фона на шаг и может иметь тень; ниже нулевого ничего не «проваливается».</p>
+        <div class="ds-demo" data-name="Слои" data-nocode><div class="demo-in"><div class="shadow-row" style="width:100%">
+          <div style="background:var(--bg)">0 · bg</div>
+          <div style="background:var(--panel-solid)">1 · panel</div>
+          <div style="background:var(--surface)">2 · surface</div>
+          <div style="background:var(--surface-2)">3 · surface-2</div>
+          <div style="box-shadow:0 20px 50px -20px var(--shadow)">поднят · toast</div>
+          <div style="box-shadow:0 40px 80px -30px var(--shadow-deep)">модальный · dialog</div>
+        </div></div></div>
+        <div class="spec-wrap"><table class="spec"><thead><tr><th>Слой</th><th>Токен</th><th>Что на нём</th><th>Тень</th></tr></thead><tbody>
+          <tr><td>0 · страница</td><td><code>--bg</code></td><td>галактика, шапка, футер</td><td>—</td></tr>
+          <tr><td>1 · панель</td><td><code>--panel</code> (стекло, blur 16) / <code>--panel-solid</code></td><td>секции страницы, расчёт, тост, меню</td><td><code>0 40px 80px -50px --shadow</code> + кромка сверху</td></tr>
+          <tr><td>2 · поверхность</td><td><code>--surface</code></td><td>плитки, поля, карточки, чипы, бейджи</td><td>нет — только рамка <code>--line</code></td></tr>
+          <tr><td>3 · hover</td><td><code>--surface-2</code></td><td>плитка под курсором, подложка прогресса</td><td>нет</td></tr>
+          <tr><td>Поднятый</td><td><code>--panel-solid</code> + <code>--line-strong</code></td><td>тост, выпадающее меню, тултип</td><td><code>0 20px 50px -20px --shadow</code></td></tr>
+          <tr><td>Модальный</td><td>затемнение <code>rgba(9,13,24,.6)</code> + blur 4</td><td>диалог, мобильная шторка</td><td><code>0 40px 80px -30px --shadow-deep</code></td></tr>
+          <tr><td>Свечение</td><td><code>--glow</code></td><td>только primary-кнопка, выбранная плитка, точки таймлайна, знак бренда</td><td><code>0 10px 26px -10px</code></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="ds-block">
+        <h3>Рамки</h3>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td><code>--line</code></td><td>1px разделители и рамки покоя: плитки, карточки, панели, строки таблиц.</td></tr>
+          <tr><td><code>--line-strong</code></td><td>рамки элементов управления: поля, ghost-кнопки, расчёт, пунктир пустого состояния.</td></tr>
+          <tr><td><code>--ink-600</code></td><td>рамка на hover — единственный примитив, разрешённый в компонентах (одинаков в обеих темах по замыслу).</td></tr>
+          <tr><td><code>--blue-500</code></td><td>рамка выбранного и сфокусированного поля, плюс внутреннее кольцо 1px у плитки.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 05 ДВИЖЕНИЕ ====================== -->
+    <section class="ds-section" id="motion">
+      <div class="ds-h"><span class="kicker"><i>05</i>Основы</span><h2>Движение</h2><p>Анимация подчиняется <code>prefers-reduced-motion</code>: всё движение — opt-in внутри <code>@media (prefers-reduced-motion: no-preference)</code>. Без него страница статична, а у каждого состояния есть цвет или текст — движение никогда не единственный сигнал.</p></div>
+      <div class="ds-block">
+        <h3>Кривая и длительности</h3>
+        <div class="ds-demo" data-name="Попробуйте" data-nocode><div class="demo-in">
+          <div class="easing"><svg viewBox="0 0 120 80" aria-hidden="true"><path d="M0 80 C 24 80, 0 0, 120 0" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M0 80 L120 0" fill="none" stroke="var(--line-strong)" stroke-dasharray="3 4"/></svg><div style="font-family:var(--font-mono);font-size:12.5px;color:var(--text-3);line-height:1.7">cubic-bezier(.2, 0, 0, 1)<br><span style="color:var(--text-4)">быстрый старт, длинный выезд</span></div></div>
+          <div class="motion-demo">
+            <button type="button" class="btn btn-primary">hover — блик</button>
+            <button type="button" class="tile" style="min-width:150px"><span class="t"><b>hover — подъём</b><span>−2px · 200 ms</span></span></button>
+            <button type="button" class="btn btn-ghost">active — scale .96</button>
+          </div>
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><thead><tr><th>Что</th><th>Значение</th><th>Где</th></tr></thead><tbody>
+          <tr><td>Кривая</td><td><code>cubic-bezier(.2, 0, 0, 1)</code></td><td>всё, кроме простых hover-переходов цвета (<code>ease</code>)</td></tr>
+          <tr><td>Hover цвет / рамка</td><td class="num">150 ms</td><td>кнопки, плитки, ссылки, чекбоксы</td></tr>
+          <tr><td>Подъём плитки</td><td class="num">200 ms · translate −2px</td><td>плитки сервисов, номиналы, планы, карточки-ссылки, способы оплаты</td></tr>
+          <tr><td>Нажатие</td><td class="num">120 ms · scale .96</td><td>любой кликабельный блок — ровно .96, не меньше (.98 у крупных карточек)</td></tr>
+          <tr><td>Появление hero</td><td class="num">700 ms · stagger 80 ms</td><td>только при загрузке, от видимого состояния</td></tr>
+          <tr><td>Подъезд панели</td><td class="num">800 ms · translate 22px</td><td>только transform — контент виден всегда, по IntersectionObserver</td></tr>
+          <tr><td>Подпрыгивание суммы</td><td class="num">450 ms</td><td>итог в расчёте при изменении (<code>.bump</code>)</td></tr>
+          <tr><td>Смена плиток</td><td class="num">350 ms · stagger 30 ms</td><td>витрина при смене категории или поиске</td></tr>
+          <tr><td>Тост, диалог</td><td class="num">300–350 ms · rise</td><td>появление снизу на 14px</td></tr>
+          <tr><td>Карта</td><td class="num">float 6 s · spin 16 s</td><td>hero виртуальной карты; на hover — пауза и наклон за курсором</td></tr>
+          <tr><td>Логотип сервиса</td><td class="num">float 7 s · орбиты 18 / 11 s</td><td>hero страницы сервиса</td></tr>
+          <tr><td>Галактика</td><td class="num">30 fps · масштаб .8</td><td>фон, статичные слои в offscreen-канвасе, батч-заливки</td></tr>
+          <tr><td>Смена темы</td><td>transition отключены на кадр</td><td>иначе страница «размазывается»</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ====================== 06 ИКОНКИ ====================== -->
+    <section class="ds-section" id="icons">
+      <div class="ds-h"><span class="kicker"><i>06</i>Основы</span><h2>Иконки и логотипы</h2><p>Интерфейсные иконки — контурные, одна библиотека, штрих 1,7px рядом с текстом 500–600. Цвет всегда <code>currentColor</code>, состояния через CSS, не отдельными файлами. Иконки категорий и логотипы сервисов — файлы из <code>assets/</code>, не редактируются.</p></div>
+      <div class="ds-block">
+        <h3>Интерфейсные иконки</h3>
+        <p>Размеры 16 / 18 / 22: 16 в малых кнопках и ссылках, 18 в полях, кнопках и алертах, 22 в чипах и пустых состояниях. Скруглённые концы и стыки.</p>
+        <div class="ds-demo" data-name="Набор" data-nocode><div class="demo-in"><div class="icon-grid" style="width:100%" id="dsIcons"></div></div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Иконки категорий</h3>
+        <p>22px в чипе, 18 в крошках, 26 в карточке категории. Свои файлы из <code>assets/category-icons</code>, не перерисовываются.</p>
+        <div class="ds-demo" data-name="Категории" data-nocode><div class="demo-in"><div class="icon-grid" style="width:100%" id="dsCatIcons"></div></div></div>
+      </div>
+      <div class="ds-block">
+        <h3>Логотипы сервисов</h3>
+        <p>В плитке — 38px, подложка 10px радиус, отступ 6px, белый фон; если логотип светлый (яркость &gt; .62, считается при сборке) — подложка <code>--ink-800</code>. В hero страницы сервиса — 58% визуала, без подложки; в светлой теме у светлых логотипов тонкая тёмная кромка через <code>drop-shadow</code>.</p>
+        <div class="ds-demo" data-name="Подложки"><div class="demo-in"><div id="dsLogos" style="display:flex;gap:10px;flex-wrap:wrap"></div></div></div>
+        <div class="dd">
+          <div class="do"><b>Можно</b><ul><li>Менять подложку, отступ, радиус и размер контейнера.</li><li>Ставить светлые логотипы на тёмную подложку автоматически по яркости.</li></ul></div>
+          <div class="dont"><b>Нельзя</b><ul><li>Перекрашивать, обрезать, менять пропорции логотипов и иконок категорий.</li><li>Заменять их эмодзи или иконками из библиотеки.</li><li>Ставить логотип без подложки поверх сложного фона в плитках.</li></ul></div>
+        </div>
+      </div>
+      <div class="ds-block">
+        <h3>Знак бренда</h3>
+        <div class="ds-demo" data-name="Бренд · main_logotype.svg"><div class="demo-in" style="gap:28px">
+          <a class="brand" href="#"><img class="brand-mark" src="{{LOGO}}" alt="">Marscap</a>
+          <img class="brand-mark" style="width:48px;height:46px" src="{{LOGO}}" alt="">
+          <img class="brand-mark" style="width:80px;height:76px" src="{{LOGO}}" alt="">
+          <img class="brand-mark" style="width:120px;height:114px" src="{{LOGO}}" alt="">
+        </div></div>
+        <div class="spec-wrap"><table class="spec"><tbody>
+          <tr><td>Файл</td><td><code>main_logotype.svg</code>, 221×210, прозрачный фон. Единственный источник знака: не перерисовывается, не обрезается; при сборке встраивается как data-URI.</td></tr>
+          <tr><td>Форма</td><td>Буква «M» из двух вертикалей-«планет», орбитальный росчерк снизу вверх и спутник в правом верхнем углу. Читается как М + траектория.</td></tr>
+          <tr><td>Цвет</td><td>Один градиент на все элементы: <code>#FFC0EF → #3354BE → #0E44A7</code> (розовый → синий → тёмно-синий). Не перекрашивать под тему: работает и на <code>--bg</code> тёмной, и на светлой.</td></tr>
+          <tr><td>Подложка</td><td>Никакой. Ни квадрата, ни круга, ни рамки — знак стоит прямо на фоне. Допускается свечение <code>drop-shadow(0 6px 14px --glow)</code> в шапке.</td></tr>
+          <tr><td>Монохром</td><td>Только на виртуальной карте — белый через <code>filter: brightness(0) invert(1)</code>, ширина 12% карты. В остальных местах — цветной.</td></tr>
+          <tr><td>Размеры</td><td>Шапка и нижний бар — 30×28; футер — 30×28; документация — 28×26; фавикон — 32 с полями 2px. Минимум 20px по высоте.</td></tr>
+          <tr><td>Слово</td><td>«Marscap» Onest 600 15px, цвет <code>--text</code>, отступ от знака 10px, базовая линия по центру знака. В футере — с описанием под ним.</td></tr>
+          <tr><td>Охранная зона</td><td>Половина ширины знака с каждой стороны; ничего не ставить ближе.</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
