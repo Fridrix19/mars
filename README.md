@@ -32,6 +32,11 @@ python3 build/build.py cursor chatgpt   # только указанные сер
 Результат пишется в `_proto/`. Пути переопределяются переменными `MC_SOURCE` (исходный сайт), `MC_SRC` (исходники), `MC_OUT` (куда собирать).
 Проверка вёрстки: `NODE_PATH=$(npm root -g) node build/shot.js _proto/dashboard.html out/dash overview` — скриншоты 1400 и 390 px и ошибки консоли.
 
+## Деплой на Vercel
+
+В корне лежит `vercel.json`: Output Directory = `_proto`, без build-команды, cleanUrls включены (`/catalog` и `/catalog.html` — одна страница).
+При импорте репозитория в Vercel ничего менять не нужно: Framework Preset — Other, Root Directory — корень репозитория. Главная будет по адресу `/`, разделы — `/section/ai/`, сервисы — `/service/cursor/`.
+
 ## Ключевые правила
 
 - Цены и тарифы — 1:1 с исходным сайтом: формула `computeChargedUsd` (до $45 — (сумма + 5) × 1.2, выше — × 1.3), планы из `payment-flow.v2.js`, затем `static-models.json`, затем дефолт раздела. Курс 80.2254.
